@@ -1,0 +1,148 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'inclues.tex' se encuentran la importación de paquetes necesarios
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{project_settings}
+\input{listings_settings}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'titlepage.tex' se encuentra la página de título
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INDICE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\clearpage 
+
+\lstset{style=cstyle}
+
+
+\section{Caso de estudio}
+
+\subsection{Situaciones de inseguridad identificadas}
+
+Lo primero que se puede asumir leyendo el relato de \emph{Un día en la oficina de Carlitos} es que el personaje no utiliza una contraseña muy segura para su computadora del trabajo (debido principalmente al largo de la misma). Acto seguido, el personaje se retira de su oficina dejando su computadora con una sesión iniciada, permitiendo que cualquiera que entre a su oficina pueda usarla como si fuese él (posible caso de \emph{usurpación de identidad}).
+
+Una vez que regresa a la oficina, se queja de toda la publicidad que le llega al mail (claro ejemplo de \emph{SPAM}, y hasta se podría llegar a dar que entre alguno de esos mensajes haya alguno malintencionado). Seguidamente abre un mensaje \emph{enviado con la cuenta} de José, su cuñado. Este mensaje contiene como adjunto un archivo ejecutable de Windows, diciendo que es una foto. Con respecto a esta situación, se pueden destacar varias cuestiones:
+
+\begin{itemize}
+    \item El mensaje puede no haber sido enviado por el dueño de la cuenta. En caso de que algún dispositivo en el cual José tenga su cuenta de correo electrónico vinculada y haya sufrido el ataque de un \emph{malware}, dicho mensaje puede no haber sido enviado por él, sino por el programa malicioso, haciendo que el mismo mensaje sea malintencionado.
+    \item El mensaje se puede tratar de un \emph{HOAX}, también. Con la excusa de que incluye una imagen cómica, los distintos remitente van enviando el mensaje a sus contactos y así manteniendo la cadena. 
+    \item El hecho de que una imagen tenga la extensión de un archivo ejecutable levanta muchas sospechas, induciendo a pensar que puede ser en sí un programa malicioso.
+\end{itemize}
+
+Después de la conversación con el Dr. Roberto Secchi narrada en el anexo, el personaje intenta desesperadamente conseguir el documento solicitado. Para ello prueba con varias contraseñas para así iniciar sesión en la computadora de una compañera de oficina (la cual no estaba presente ese día). Eso se trata de una grave violación a la privacidad de su compañera. Al no tener éxito, repite la situación con la computadora de otro compañero, logrando entrar debido a una contraseña muy débil y abiertamente conocida por sus pares.
+
+Una vez que consiguió ingresar en la computadora, recupera el documento necesario y se lo envía al Dr. Secchi, saliendo así de un apuro.
+
+\subsection{Fallas evidenciadas}
+
+~\\
+\emph{8:20} 
+\begin{enumerate}[a)]
+    \item Elección de contraseña insegura.
+    \item Utilización de correo electrónico inseguro.
+    \item Ingeniería Social
+    \item a y c.
+\end{enumerate}
+
+\textbf{Respuesta:} d). 
+
+~\\
+\emph{9:47} 
+\begin{enumerate}[a)]
+    \item SPAM
+    \item Adjunto de archivos ejecutables (photo.exe)
+    \item HOAX
+    \item a y b.
+\end{enumerate}
+
+\textbf{Respuesta:} d). 
+
+~\\
+\emph{9:57} 
+\begin{enumerate}[a)]
+    \item Elección de contraseña segura.
+    \item Ingeniería Social.
+    \item HOAX.
+    \item a, b y c.
+\end{enumerate}
+
+\textbf{Respuesta:} a). 
+
+~\\
+\emph{10:00} 
+\begin{enumerate}[a)]
+    \item Usurpación de Identidad.
+    \item Ingeniería Social.
+    \item Elección de contraseña insegura.
+    \item a, b y c
+\end{enumerate}
+
+\textbf{Respuesta:} d). 
+
+\subsection{Medidas de seguridad}
+
+Con respecto a una de las primeras situaciones identificadas (el personaje del relato deja su computadora con la sesión iniciada y se retira de la oficina), una posible solución sería que todas las computadoras de la oficina se bloqueen (cierren la sesión, requiriendo de nuevo la contraseña) dentro de un breve período de inactividad.
+
+Para las situaciones en las que el personaje utilizó las computadoras de los compañeros, una solución podría ser establecer una política de seguridad la cual dictamine un \emph{formato} a cumplir para las contraseñas (para generar contraseñas seguras), y que dichas contraseñas se vayan cambiando periodicamente. 
+
+\section{Análisis del video \dq{Escritorio limpio}}
+
+\begin{itemize}
+    \item No se toman medidas de seguridad física para almacenar documentos importantes. El \emph{backup} del proyecto en el cual estaba trabajando el personaje es dejado encima del escritorio, más allá de haberle dicho a su superior que lo iba a guardar en una caja fuerte. Sobre el final del video se puede ver cómo la cámara de seguridad capturó a varias personas entrando a la oficina y aprovechándose de estos descuidos.
+    \item Uso de contraseñas débiles, y mal manejo de las mismas. El personaje deja anotada su contraseña en su monitor, permitiendo que cualquier persona que entre a su oficina la conozca. Cabe destacar también que el personal de administración de redes y de seguridad de la oficina tiene acceso a su contraseña.
+    \item El personaje es víctima de \emph{Trashing}. Al final del video se ve cómo el personal de limpieza revisa en su basura y retira documentos que no fueron correctamente desechados (destruidos). 
+    \item Pérdida de copias de resguardo. El \emph{backup} del proyecto es retirado de la oficina inadvertidamente. 
+\end{itemize}
+
+\section{Claves}
+
+El principal problema de proteger información con claves débiles es lo fácil que se pueden conseguir esas claves. Ya sea probando algunas combinaciones habituales (como \dq{12345}, \dq{admin}, la fecha de nacimiento de la persona, entre otros) o con herramientas que automatizan ese trabajo (ya sea con diccionarios o mediante fuerza bruta).
+
+\subsection{Análisis de contraseñas}
+
+Utilizando el sitio \url{https://www.segu-info.com.ar/proteccion/fortaleza_clave.htm} se obtuvieron los siguientes resultados:
+
+\begin{itemize}
+    \item La constraseña \texttt{admin} tiene una puntuación de 7\% 
+    \item La constraseña \texttt{ARyS la mejor materia!} (utilizando espacios) logra una puntuación de 100\% 
+\end{itemize}
+
+\subsection{Vulnerabilidad en Internet}
+
+\subsection{Medidas de seguridad personales}
+
+\subsection{Acciones para la concientización}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIN DOCUMENTO, AHORA REFERENCIAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\printbibliography
+
+\end{document}
+
