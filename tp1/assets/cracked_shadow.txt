@@ -1,0 +1,7 @@
+root:root:17401:0:99999:7:::
+bruno:123456:17401:0:99999:7:::
+defo:defo1234:17401:0:99999:7:::
+pepe:pepe123:17401:0:99999:7:::
+rosa:qwerty:17401:0:99999:7:::
+
+5 password hashes cracked, 0 left

