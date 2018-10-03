@@ -21,6 +21,35 @@
 
 \lstset{style=bashstyle}
 
+\section{\emph{Footprinting}}
+
+El término \emph{Footprinting} se refiere al proceso de recolectar la mayor cantidad de información posible sobre un sistema objetivo con el fin de encontrar formas de penetrarlo \autocite{FootprintingOpenCampus}. Este etapa previa a realizar un ataque, conocida como \emph{fase de reconocimiento}, el atacante intenta encontrar información como \autocite{FootprintingCiberinformatico}:
+
+\begin{itemize}
+    \item Rango de Red y sub-red (\emph{Network Range} y \emph{subnet mask})
+    \item Acertar máquinas o computadoras activas
+    \item Puertos abiertos y las aplicaciones que están corriendo en ellos
+    \item Detectar versiones de sistemas operativos
+    \item Nombres de Dominios (\emph{Domain Names})
+    \item Bloques de Red (\emph{Network Blocks})
+    \item Direcciones IP específicas
+    \item País y ciudad donde se encuentran los servidores
+    \item Información de contacto (números telefónicos, emails)
+    \item \emph{DNS records}
+\end{itemize}
+
+Mucha de la información antes mencionada, como Domain Names, algunas direcciones IP, país, ciudad, e información de contacto puede ser conseguida consultando a las bases de datos de \emph{whois}. Esto se realiza justamente con el comando \texttt{whois} y el nombre del \emph{dominio} al cual se quiere consultar. Por ejemplo, si se desea conocer información sobre el dominio \emph{facebook.com}, se debe realizar la siguiente invocación a \texttt{whois}:
+
+\begin{lstlisting}
+    whois facebook.com
+\end{lstlisting}
+
+Además del comando \emph{whois}, que recupera información detallada sobre el dominio consultado (quién es su dueño, fecha de registro, fecha de expiración, entre otros), otras herramientas para hacer consultas a DNS son los comandos \texttt{nslookup} y \texttt{dig}. Para hacer \emph{enumeración de DNS} (obtener todos los subdominios registrados bajo un dominio) existen herramientas como \texttt{fierce}, \texttt{dnsrecon}, o \texttt{dnsenum} \autocite{DNSEnumerationTools}.   
+
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
