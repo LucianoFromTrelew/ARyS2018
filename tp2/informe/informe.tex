@@ -46,6 +46,79 @@ Mucha de la información antes mencionada, como Domain Names, algunas direccione
 
 Además del comando \emph{whois}, que recupera información detallada sobre el dominio consultado (quién es su dueño, fecha de registro, fecha de expiración, entre otros), otras herramientas para hacer consultas a DNS son los comandos \texttt{nslookup} y \texttt{dig}. Para hacer \emph{enumeración de DNS} (obtener todos los subdominios registrados bajo un dominio) existen herramientas como \texttt{fierce}, \texttt{dnsrecon}, o \texttt{dnsenum} \autocite{DNSEnumerationTools}.   
 
+\emph{Elija dos organizaciones cualesquiera y utilizando WHOIS y DIG, averigüe toda la información que pueda: servidores de correo, servidores DNS, Servidores WEB, etc} 
+~\\
+
+Dentro del directorio \dq{assets} se incluye un \emph{script} nombrado \dq{footprinting.sh}, el cual recibe un nombre de dominio y realiza varias consultas con los comando \texttt{dig} y \texttt{whois}. A continuación se incluye un ejemplo de ejecución con el dominio \emph{github.com} y las partes más importantes de su salida
+
+\begin{lstlisting}
+   bash footprinting.sh github.com 
+
+   >>>
+
+    *** dig -t NS +short github.com ***
+    ns3.p16.dynect.net.
+    ns1.p16.dynect.net.
+    ns4.p16.dynect.net.
+    ns-520.awsdns-01.net.
+    ns-1283.awsdns-32.org.
+    ns2.p16.dynect.net.
+    ns-1707.awsdns-21.co.uk.
+    ns-421.awsdns-52.com.
+
+    *** dig -t MX +short github.com ***
+    1 ASPMX.L.GOOGLE.com.
+    5 ALT1.ASPMX.L.GOOGLE.com.
+    5 ALT2.ASPMX.L.GOOGLE.com.
+    10 ALT3.ASPMX.L.GOOGLE.com.
+    10 ALT4.ASPMX.L.GOOGLE.com.
+
+    *** dig -t SOA +short github.com ***
+    ns1.p16.dynect.net. hostmaster.github.com. 1538412644 3600 600 604800 60
+
+    *** whois github.com ***
+       Domain Name: GITHUB.COM
+       Registry Domain ID: 1264983250_DOMAIN_COM-VRSN
+       Registrar WHOIS Server: whois.markmonitor.com
+       Registrar URL: http://www.markmonitor.com
+       Updated Date: 2017-06-26T16:02:39Z
+       Creation Date: 2007-10-09T18:20:50Z
+       Registry Expiry Date: 2020-10-09T18:20:50Z
+       .
+       .
+       .
+\end{lstlisting}
+
+\emph{Visite el sitio http://www.netcraft.net/ y pruebe la funcionalidad del mismo contra el dominio www.unp.edu.ar} 
+~\\
+
+Algunos de los datos que indica sitio \emph{www.netcraft.com} sobre el dominio de la UNP son los siguientes:
+
+\begin{itemize}
+    \item Título del sitio: \emph{Universidad Nacional de la Patagonia San Juan Bosco} 
+    \item Visto por primera vez en \emph{Junio de 1998} 
+    \item Lenguaje primario \emph{español} 
+    \item Puntaje de 7 sobre 10 en \emph{Netcraft Risk Rating} \footnote{Aunque algunos sitios tengan contenido no malicioso, \emph{Netcraft Extension} puede asignar un valor alto de riesgo porque está siendo servido bajo un dominio recientemente agregado a la base de datos de \emph{Netcraft}, porque el sitio nunca fue visto en la \emph{Netcraft Web Server Survey}, o porque la red que sirve el sitio ha servido sitios fraudulentos en el pasado. Distintos factores son tomados en cuenta \autocite{NetcraftRiskRatingFAQ}} 
+    \item Dominio \emph{unp.edu.ar} 
+    \item Dirección IPv4 \emph{170.210.88.21} 
+    \item \emph{Nameserver} \emph{chenque.unp.edu.ar}  
+    \item Administrador de DNS \emph{hostmaster@unp.edu.ar} 
+\end{itemize}
+
+\emph{Visite el sitio http://www.archive.org/web/web.php y pruebe la funcionalidad del mismo contra el sitio web de la UNP: www.unp.edu.ar. ¿Qué ventajas presenta esta herramienta respecto de otras herramientas de footprinting?} 
+~\\
+
+A diferencia de herramientas como \texttt{dig} y \texttt{whois}, el sitio \emph{www.archive.org} se dedica a visitar sitios web y tomarles un \emph{snapshot} de su estado actual. Al hacerle una consulta sobre algún sitio en particular, muestra los distintos cambios por los cuales ha pasado, pudiendo ver versiones anteriores. También brinda herramientas para visualizar la cantidad de archivos tipo MIME con los cuales ha contado el sitio (ya sean imágenes, hojas de estilo, archivos con código Javascript, y demás). Por último, recolecta y muestra las distintas \emph{URLs} que publica el sitio, con los recursos a los cuales se pueden acceder a través de la \emph{URL}.
+
+\section{\emph{Fingerprinting}}
+
+\begin{itemize}
+    \item El sitio \emph{www.google.com} utiliza como servidor web \emph{Google Web Server} (\emph{GWS}), pero no se puede saber por las cabeceras HTTP de la respuesta qué versión de servidor usa
+    \item El sitio \emph{www.ing.unp.edu.ar} indica que está usando la versión 1.10.3 del servidor web \emph{NginX}  
+    \item El sitio \emph{www.microsoft.com} utiliza como servidor web \emph{Apache}, pero no se puede saber por las cabeceras HTTP de la respuesta qué versión de servidor usa
+    \item El sitio \emph{serconex.juschubut.gov.ar} utiliza un servidor web \emph{Microsoft-IIFS}, versión 10.0
+\end{itemize}
+
 
 
 
