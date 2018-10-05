@@ -119,6 +119,159 @@ A diferencia de herramientas como \texttt{dig} y \texttt{whois}, el sitio \emph{
     \item El sitio \emph{serconex.juschubut.gov.ar} utiliza un servidor web \emph{Microsoft-IIFS}, versión 10.0
 \end{itemize}
 
+\section{Escaneo}
+
+El \emph{escaneo} ó \emph{scanning} es una actividad que consiste en detectar distintos dispositivos conectados a la red, pudiendo saber qué sistema operativo están corriendo, qué puertos tienen abiertos, o qué servidores están atendiendo peticiones. 
+
+\begin{itemize}
+    \item Escaneo de hosts: se puede realizar con \texttt{nmap} o con un pequeño script en \emph{bash} que envíe un paquete utilizado \texttt{ping} a cada IP posible de la red (sabiendo la dirección de la red y su máscara, se puede calcular cuántas IPs habrán). De esta forma se puede averiguar cuántos dispositivos hay conectados a la red (aunque \texttt{nmap} brinda más información)
+    \item Escaneo de puertos: también es posible hacerlo con \texttt{nmap}, indicándole una IP en particular (o combinándolo con \emph{bash}, para que itere sobre varias dirección IP). De esta forma se puede saber qué puertos tiene abierto un \emph{host} y qué servicios ofrece (también se podría intentar explotar alguna posible vulnerabilidad)
+    \item Escaneo de redes WiFi: las placas modernas de red lo hacen automáticamente. Detectan qué redes WiFi hay en su rango de alcance, indicando su \emph{SSID} (si es que es público), si requieren contraseña, con qué algoritmo de encriptación trabajan para manejar las contraseñas, entre otros
+    \item Escaneo de dispositivos bluetooth: se podría hacer con un dispositivo Android. De esta forma se puede detectar qué otros dispositivos están a la escucha de conexiones bluetooth, y se podría de estar forma intentar explotar alguna vulnerabilidad de la versión de bluetooth que estén corriendo.
+\end{itemize}
+
+\emph{Indique qué tipo de escaneo (hosts, puertos, vulnerabilidades, WiFi) es posible realizar}
+
+\begin{itemize}
+    \item \emph{Sólo manipulando el protocolo ARP:} \emph{hosts} (misma red)
+    \item \emph{Sólo manipulando el protocolo ICMP:} \emph{hosts} (no es necesario estar en la misma red)
+    \item \emph{Sólo manipulando el protocolo TCP:} puertos (no es necesario estar en la misma red).
+    \item \emph{Sólo manipulando el protocolo UDP:} puertos (no es necesario estar en la misma red).
+    \item \emph{Interpretando en forma pasiva tráfico de red (LAN o algún tipo de radiofrecuencias):} WiFi (misma red)
+\end{itemize}
+
+\section{Escaneo de puertos}
+
+Para verificar los puertos abiertos en la máquina virtual de Kali, primero se ejecutó el comando \texttt{netstat} con dos combinaciones de parámetros distintas 
+
+\begin{lstlisting}[title={Ningún puerto abierto}]
+root@kali:~# netstat -nat
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+\end{lstlisting}
+
+\begin{lstlisting}[title={Ningún puerto abierto}]
+root@kali:~# netstat -nltp4
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+\end{lstlisting}
+
+Luego, la salida que se obtiene de ejecutar \texttt{nmap} es consistente con lo indicado por \texttt{netstat}  
+
+\begin{lstlisting}
+root@kali:~# nmap 127.0.0.1
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2018-10-05 06:58 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.0000040s latency).
+All 1000 scanned ports on localhost (127.0.0.1) are closed
+
+Nmap done: 1 IP address (1 host up) scanned in 0.15 seconds
+\end{lstlisting}
+
+\begin{lstlisting}[title={Escaneo de los 65535 puertos disponibles}]
+root@kali:~# nmap -p- 127.0.0.1
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2018-10-05 06:58 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.0000020s latency).
+All 65535 scanned ports on localhost (127.0.0.1) are closed
+
+Nmap done: 1 IP address (1 host up) scanned in 0.45 seconds
+\end{lstlisting}
+
+Ahora bien, se abrimos un puerto TCP con el comando \texttt{ncat}, la salida tanto de \texttt{netstat} como de \texttt{nmap} cambia acordemente   
+
+\begin{lstlisting}[title={Ponemos a escuchar al puerto 8080 por conexiones TCP}]
+ncat -l 8080 
+\end{lstlisting}
+
+\begin{lstlisting}[title={\texttt{netstat} indica un puerto abierto}]
+root@kali:~# netstat -nltp4
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      2354/ncat
+\end{lstlisting}
+
+\begin{lstlisting}[title={\texttt{nmap} indica 65534 puertos cerrados, y uno abierto}]
+root@kali:~# nmap -p- 127.0.0.1
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2018-10-05 07:14 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.0000020s latency).
+Not shown: 65534 closed ports
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
+\end{lstlisting}
+
+
+\subsection{Pruebas con \texttt{hping3}}
+
+\emph{Escaneo del puerto TCP/80 de la máquina local (localhost)} 
+
+\begin{itemize}
+    \item Comando a ejecutar: \texttt{hping3 -c 3 -p 80 -S localhost} 
+    \begin{itemize}
+        \item En la salida de \texttt{tcpdump} se puede ver que se está mandando un paquete TCP con la bandera \texttt{SYN} al puerto 80 (\emph{Half-open SYN flag scanning})
+        \item La respuesta a dicho envío es un paquete con las banderas \texttt{RST} y \texttt{ACK}; a partir de esa respuesta se puede deducir que \textbf{el puerto estaba cerrado}   
+    \end{itemize}
+\end{itemize}
+
+\emph{Escaneo del puerto TCP/113 de la máquina local (localhost)} 
+
+\begin{itemize}
+    \item Comando a ejecutar: \texttt{hping3 -c 3 -p 113 -S localhost} 
+    \begin{itemize}
+        \item En la salida de \texttt{tcpdump} se puede ver que se está mandando un paquete TCP con la bandera \texttt{SYN} al puerto 113 (\emph{Half-open SYN flag scanning})
+        \item La respuesta a dicho envío es un paquete con las banderas \texttt{RST} y \texttt{ACK}; a partir de esa respuesta se puede deducir que \textbf{el puerto estaba cerrado}   
+    \end{itemize}
+\end{itemize}
+
+\emph{Escaneo del puerto UDP/631 de la máquina local (localhost)} 
+
+\begin{itemize}
+    \item Comando a ejecutar: \texttt{hping3 -c 3 -p 631 -2 localhost} 
+    \begin{itemize}
+        \item En la salida de \texttt{tcpdump} se puede ver que se está mandando un paquete UDP al puerto 631 (\emph{UDP ICMP port unreachable scanning})
+        \item La respuesta a dicho envío es un mensaje ICMP indicando que \textbf{el puerto UDP 631 está inalcanzable} 
+    \end{itemize}
+\end{itemize}
+
+\emph{Escaneo del puerto UDP/53 de la máquina local (localhost)} 
+
+\begin{itemize}
+    \item Comando a ejecutar: \texttt{hping3 -c 3 -p 53 -2 localhost} 
+    \begin{itemize}
+        \item En la salida de \texttt{tcpdump} se puede ver que se está mandando un paquete UDP al puerto 53 (DNS) (\emph{UDP ICMP port unreachable scanning})
+        \item La respuesta a dicho envío es un mensaje ICMP indicando que \textbf{el puerto UDP 53 está inalcanzable} 
+    \end{itemize}
+\end{itemize}
+
+\subsection{\emph{IDLE SCAN}}
+
+\emph{¿Qué características debe reunir un host que se pueda utilizar como zombie?} 
+
+Para que un \emph{host} sea utilizado como \emph{zombie}, su tráfico en la red debe ser mínimo, de modo que el ID de los paquetes IP (\emph{IPID}) sólo incremente con los paquetes enviados para el \emph{IDLE SCAN} (o que el incremento sea predecible).
+
+\subsection{Detección de escaneo de puertos}
+
+Una forma de detectar y evitar escaneo de puertos, sería bloquear las direcciones IPs de aquellos \emph{hosts} que estén realizando alguna actividad sospechosa como por ejemplo enviar un paquete TCP con las banderas \texttt{SYC+ACK} cuando no se estaban esperando.
+
+Con respecto a la detección de un \emph{idle scan}, se debería evitar el uso de valores de ID de los paquetes IP enviados predecibles.  
+
+Cabe aclarar que existen implementaciones tanto de software como de hardware (IDS) para detectar escaneo de puertos, de hosts, de vulnerabilidades, entre otros.
+
+
+
+
+
+
+
+
+
+
 
 
 
