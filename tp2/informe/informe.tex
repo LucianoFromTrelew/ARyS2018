@@ -110,7 +110,7 @@ Algunos de los datos que indica sitio \emph{www.netcraft.com} sobre el dominio d
 
 A diferencia de herramientas como \texttt{dig} y \texttt{whois}, el sitio \emph{www.archive.org} se dedica a visitar sitios web y tomarles un \emph{snapshot} de su estado actual. Al hacerle una consulta sobre algún sitio en particular, muestra los distintos cambios por los cuales ha pasado, pudiendo ver versiones anteriores. También brinda herramientas para visualizar la cantidad de archivos tipo MIME con los cuales ha contado el sitio (ya sean imágenes, hojas de estilo, archivos con código Javascript, y demás). Por último, recolecta y muestra las distintas \emph{URLs} que publica el sitio, con los recursos a los cuales se pueden acceder a través de la \emph{URL}.
 
-\section{\emph{Fingerprinting}}
+\section{\emph{Fingerprinting} de servidores}
 
 \begin{itemize}
     \item El sitio \emph{www.google.com} utiliza como servidor web \emph{Google Web Server} (\emph{GWS}), pero no se puede saber por las cabeceras HTTP de la respuesta qué versión de servidor usa
@@ -262,6 +262,70 @@ Una forma de detectar y evitar escaneo de puertos, sería bloquear las direccion
 Con respecto a la detección de un \emph{idle scan}, se debería evitar el uso de valores de ID de los paquetes IP enviados predecibles.  
 
 Cabe aclarar que existen implementaciones tanto de software como de hardware (IDS) para detectar escaneo de puertos, de hosts, de vulnerabilidades, entre otros.
+
+
+\subsection{\emph{Fingerprinting} de sistemas operativos}
+
+En \autocite{OSFingerprinting} se da la siguiente definición de \emph{fingerprinting de sistemas operativos}:
+
+\begin{quote}
+    (\emph{OS Fingerprinting}) es el proceso de recopilación de información que permite identificar el sistema operativo en el ordenador que se tiene por objetivo. El \textbf{OS Fingerprinting activo} se basa en el hecho de que cada sistema operativo responde de forma diferente a una gran variedad de paquetes malformados. De esta manera, utilizando herramientas que permitan comparar las respuestas con una base de datos con referencias conocidas, es posible identificar cuál es el sistema operativo.
+    
+    [...] El \textbf{OS Fingerprinting pasivo} no se realiza directamente sobre el sistema operativo objetivo. Este método consiste en el análisis de los paquetes que envía el propio sistema objetivo a través de técnicas de sniffing. De esta forma, es posible comparar esos paquetes con una base de datos donde se tenga referencias de los distintos paquetes de los diferentes sistemas operativos y, por lo tanto, es posible identificarlos.
+\end{quote}
+
+La finalidad de llevar a cabo un proceso de \emph{fingerprinting de sistemas operativos} consiste en \textbf{determinar qué sistema operativo está corriendo} cierto \emph{host} dentro de una red.   
+
+El comando \texttt{nmap} permite hacer \emph{fingerprinting de sistemas operativos}. Para ello, se lo debe ejecutar con la bandera \texttt{-o}   
+
+\begin{lstlisting}[title={Se debe ejecutar el comando con privilegios de superusuario}]
+$ sudo nmap -O <IP>
+\end{lstlisting}
+
+\begin{lstlisting}[title={\emph{OS Fingerprinting} a un Ubuntu 16.04}]
+$ sudo nmap -O 192.168.0.16
+
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-10-05 11:44 -03
+Nmap scan report for 192.168.0.16
+Host is up (0.0054s latency).
+Not shown: 999 closed ports
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+MAC Address: 30:3A:64:2C:0E:25 (Intel Corporate)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+
+OS detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 4.61 seconds
+[luciano@arch-bangho:~/Documents] bash $ sudo nmap -o 192.168.0.16
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-10-05 11:45 -03
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap done: 0 IP addresses (0 hosts up) scanned in 0.03 seconds
+\end{lstlisting}
+
+\begin{lstlisting}[title={\emph{OS Fingerprinting} a un Debian 9}]
+$ sudo nmap -O 192.168.0.48
+
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-10-05 11:47 -03
+Nmap scan report for pcdebian1 (192.168.0.48)
+Host is up (0.0045s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+MAC Address: 84:16:F9:11:DA:02 (Tp-link Technologies)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+
+OS detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 2.43 seconds
+\end{lstlisting}
+
 
 
 
