@@ -327,19 +327,13 @@ Nmap done: 1 IP address (1 host up) scanned in 2.43 seconds
 \end{lstlisting}
 
 
+\subsection{\emph{Fingerprinting} de servicios}
 
+\emph{¿Cuál es la finalidad de realizar fingerprinting de servicios? ¿banner grabbing es la forma más sencilla de realizarlo?} 
 
+La finalidad del \emph{fingerprinting de servicios} es \textbf{qué servicios y qué versiones de los servicios tiene corriendo un \emph{host} en un puerto bien conocido}. Una de las formas más sencillas de realizarlo es a través del \emph{banner grabbing}, que consiste en determinar el servicio y su versión en base a la respuesta inicial que dio el servidor al mensaje enviado al puerto bien conocido.
 
-
-
-
-
-
-
-
-
-
-
+Un ejemplo de esto sería enviarle un paquete al puerto 22 de un servidor, y verificar qué servidor de SSH está atendiendo.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
