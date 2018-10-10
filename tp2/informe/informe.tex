@@ -335,6 +335,39 @@ La finalidad del \emph{fingerprinting de servicios} es \textbf{qué servicios y 
 
 Un ejemplo de esto sería enviarle un paquete al puerto 22 de un servidor, y verificar qué servidor de SSH está atendiendo.
 
+\section{Enumeración}
+
+\emph{¿Qué es enumeración?} 
+~\\
+
+La enumeración tiene lugar después de la etapa de \emph{escaneo} (\emph{footprinting}, \emph{fingerprinting}, \emph{Google hacking}) y es el proceso de recopilación y compilación de nombres de usuario, nombres de las máquinas, recursos de red, recursos compartidos y servicios que se pueden conseguir de un objetivo \autocite{EhackEnumeracion}.  
+
+\subsection{Enumeración de distintos protocolos}
+
+\begin{itemize}
+    \item Redes \emph{WiFi} 
+    \begin{itemize}
+        \item \texttt{nmcli dev wifi} 
+        \item \texttt{sudo iw dev $<$INTERFAZ\_INALÁMBRICA$>$ scan} 
+    \end{itemize}
+    \item Dispositivos \emph{bluetooth} (la computadora que realiza el escaneo debe contar con un dispositivo bluetooth y estar encendido) 
+    \begin{itemize}
+        \item \texttt{hcitool scan} 
+    \end{itemize}
+    \item Recursos presentes de un red Windows
+    \begin{itemize}
+        \item \texttt{nbtscan $<$DIRECCION\_RED$>$/$<$MÁSCARA$>$} 
+    \end{itemize}
+    \item Información de DNS de algún dominio en particular
+    \begin{itemize}
+        \item \texttt{dig any +nocmd +multiline +noall +answer $<$DOMINIO$>$} 
+    \end{itemize}
+\end{itemize}
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIN DOCUMENTO, AHORA REFERENCIAS
