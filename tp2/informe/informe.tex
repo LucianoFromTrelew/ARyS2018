@@ -420,6 +420,50 @@ Para realizar el mismo experimento pero con la herramienta \texttt{hydra-gtk} (v
 \end{figure}
 
 
+\section{\emph{Firewall}}
+
+
+\subsection{Ejemplo de implemetación de un \emph{firewall}}
+
+\emph{¿Qué tipo de política de firewall se implementó?} 
+~\\
+
+El enunciado indica que el \emph{firewall} de la red es sin estados y que \textbf{solamente debería permitir} dos ocasiones particulares, por lo tanto es una política \textbf{restrictiva} (bloquea todo aquello que no esté expresamente indicado).   
+
+\emph{¿Son suficientes estas reglas? En caso que no las considere suficientes para resolver el objetivo planteado, indique qué reglas agregaría y en qué orden las pondría} 
+~\\
+
+Con la primer regla se logra cumplir el objetivo de permitir a usuario de Internet (usuarios externos a la red) acceder al sitio web publicado (proceso corriendo en el puerto 80). Sin embargo, el segundo objetivo no está resuelto todavía; para ello, haría falta agregar la siguiente regla \textbf{antes de la definición de la política} (antes de la última regla):
+
+\begin{center}
+  \begin{tabular}{ | c | c | c | c | c | c | c | }
+    \hline
+    Orden & Protocolo & IP Origen & Puerto Origen & IP Destino & Puerto Destino & Acción \\
+    \hline
+    2 & TCP & ALL & ALL & 200.10.11.2 & 443 & Aceptar \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\emph{Si ahora se quiere que la \dq{Estación Y: 200.10.11.100} pueda hacer ping a \emph{www.google.com} para ver los tiempos de respuesta ¿cómo modificaría las reglas del firewall?} 
+~\\
+
+Para lograr este nuevo objetivo, una solución sencilla sería añadir la siguiente regla \textbf{antes de la última} 
+
+\begin{center}
+  \begin{tabular}{ | c | c | c | c | c | c | c | }
+    \hline
+    Orden & Protocolo & IP Origen & Puerto Origen & IP Destino & Puerto Destino & Acción \\
+    \hline
+    3 & TCP & 200.10.11.100 & ALL & 64.233.190.105 & 443 & Aceptar \\
+    \hline
+  \end{tabular}
+\end{center}
+
+
+
+
+
 
 
 
