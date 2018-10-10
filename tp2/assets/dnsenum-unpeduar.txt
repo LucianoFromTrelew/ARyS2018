@@ -1,0 +1,199 @@
+dnsenum.pl VERSION:1.2.3
+[1;34m
+-----   unp.edu.ar   -----
+[0m[1;31m
+
+Host's addresses:
+__________________
+
+[0m[1;31m
+
+Name Servers:
+______________
+
+[0munpata.unp.edu.ar.                       10708    IN    A        170.210.88.3
+chenque.unp.edu.ar.                      10709    IN    A        170.210.88.4
+[1;31m
+
+Mail (MX) Servers:
+___________________
+
+[0mpmg.unp.edu.ar.                          10709    IN    A        170.210.88.254
+[1;31m
+
+Trying Zone Transfers and getting Bind Versions:
+_________________________________________________
+
+[0m
+Trying Zone Transfer for unp.edu.ar on chenque.unp.edu.ar ... 
+
+Trying Zone Transfer for unp.edu.ar on unpata.unp.edu.ar ... 
+unp.edu.ar.                              10800    IN    SOA               (
+unp.edu.ar.                              10800    IN    TXT         "v=spf1
+unp.edu.ar.                              10800    IN    MX               10
+unp.edu.ar.                              10800    IN    NS       unpata.unp.edu.ar.
+unp.edu.ar.                              10800    IN    NS       chenque.unp.edu.ar.
+academica.unp.edu.ar.                    10800    IN    CNAME    nginx.unp.edu.ar.
+www.academica.unp.edu.ar.                10800    IN    CNAME    nginx.unp.edu.ar.
+aling.unp.edu.ar.                        10800    IN    MX                1
+alumnosfcn.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+alumnosing.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+www.appsalud.unp.edu.ar.                 10800    IN    CNAME    nginx.unp.edu.ar.
+www.apunp.unp.edu.ar.                    10800    IN    CNAME    nginx.unp.edu.ar.
+arai-registry.unp.edu.ar.                10800    IN    CNAME    nginx.unp.edu.ar.
+asterisk.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+asteriskgw.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+www.bdt.unp.edu.ar.                      10800    IN    CNAME    informatica.unp.edu.ar.
+sistema.biblio.unp.edu.ar.               10800    IN    CNAME    nginx.unp.edu.ar.
+sistema-intra.biblio.unp.edu.ar.         10800    IN    CNAME    nginx.unp.edu.ar.
+biblioteca.unp.edu.ar.                   10800    IN    MX                1
+biblioteca.unp.edu.ar.                   10800    IN    A        170.210.88.21
+www.biblioteca.unp.edu.ar.               10800    IN    CNAME    nginx.unp.edu.ar.
+campus.unp.edu.ar.                       10800    IN    CNAME    nginx.unp.edu.ar.
+campus2.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+campusvirtual.unp.edu.ar.                10800    IN    CNAME    nginx.unp.edu.ar.
+www.campusvirtual.unp.edu.ar.            10800    IN    CNAME    nginx.unp.edu.ar.
+fi.cartelera.unp.edu.ar.                 10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+www.cefi.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+chenque.unp.edu.ar.                      10800    IN    A        170.210.88.4
+www.comdoc.unp.edu.ar.                   10800    IN    CNAME    informatica.unp.edu.ar.
+www.comdocii.unp.edu.ar.                 10800    IN    CNAME    informatica.unp.edu.ar.
+cup.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+fi.cursos.unp.edu.ar.                    10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+www.cyp.unp.edu.ar.                      10800    IN    CNAME    informatica.unp.edu.ar.
+www.dead.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+www.ded.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+dgsa.unp.edu.ar.                         10800    IN    CNAME    nginx.unp.edu.ar.
+dirinfo.unp.edu.ar.                      10800    IN    MX                1
+dirinfo.unp.edu.ar.                      10800    IN    A        170.210.88.21
+www.dpad.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+dsa.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+dtg.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+dztw.unp.edu.ar.                         10800    IN    A        168.226.35.135
+www.eip.unp.edu.ar.                      10800    IN    CNAME    eruma.unp.edu.ar.
+eruma.unp.edu.ar.                        10800    IN    A        138.36.97.245
+www.eruma.unp.edu.ar.                    10800    IN    CNAME    eruma.unp.edu.ar.
+www.f1.unp.edu.ar.                       10800    IN    CNAME    informatica.unp.edu.ar.
+www.fcj.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+fcn.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+www.fcn.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+fcnalumnos.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+fcnguarani.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+fcninfo.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+www.fcninfo.unp.edu.ar.                  10800    IN    CNAME    nginx.unp.edu.ar.
+fcninformix.unp.edu.ar.                  10800    IN    CNAME    nginx.unp.edu.ar.
+www.fhcs.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+fproxy.unp.edu.ar.                       10800    IN    A        170.210.88.9
+fw-wan.unp.edu.ar.                       10800    IN    A        170.210.88.17
+guarani.unp.edu.ar.                      10800    IN    A        170.210.88.52
+guarani3test.unp.edu.ar.                 10800    IN    A        170.210.88.51
+guaranifcj.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+guaranifhcs.unp.edu.ar.                  10800    IN    CNAME    nginx.unp.edu.ar.
+www.idc.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+www.ide.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+imap.unp.edu.ar.                         10800    IN    CNAME    unpata.unp.edu.ar.
+informatica.unp.edu.ar.                  10800    IN    MX                1
+informatica.unp.edu.ar.                  10800    IN    A        170.210.88.21
+www.informatica.unp.edu.ar.              10800    IN    CNAME    informatica.unp.edu.ar.
+infoweb.unp.edu.ar.                      10800    IN    CNAME    informatica.unp.edu.ar.
+www.infoweb2.unp.edu.ar.                 10800    IN    CNAME    informatica.unp.edu.ar.
+www.infoweb3.unp.edu.ar.                 10800    IN    CNAME    informatica.unp.edu.ar.
+ing.unp.edu.ar.                          10800    IN    MX                1
+dinfo.ing.unp.edu.ar.                    10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+www.dinfo.ing.unp.edu.ar.                10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+robocomp.dit.ing.unp.edu.ar.             10800    IN    CNAME             (
+www.dit.ing.unp.edu.ar.                  10800    IN    A        186.129.250.57
+ftp.ing.unp.edu.ar.                      10800    IN    A        170.210.88.17
+www.kolla.ing.unp.edu.ar.                10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+mail.ing.unp.edu.ar.                     10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+phoenix.ing.unp.edu.ar.                  10800    IN    A        170.210.88.21
+www.rtsg.ing.unp.edu.ar.                 10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+www.ing.unp.edu.ar.                      10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+www.iw4.unp.edu.ar.                      10800    IN    CNAME    informatica.unp.edu.ar.
+www.labsig.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+localhost.unp.edu.ar.                    10800    IN    A         127.0.0.1
+ftp.madryn.unp.edu.ar.                   10800    IN    CNAME    wanriu.unp.edu.ar.
+www.madryn.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+mdn.unp.edu.ar.                          10800    IN    MX                1
+mediaserver.unp.edu.ar.                  10800    IN    CNAME    wanriu.unp.edu.ar.
+moodle3.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+museodelpetroleo.unp.edu.ar.             10800    IN    CNAME    nginx.unp.edu.ar.
+www.museodelpetroleo.unp.edu.ar.         10800    IN    CNAME    nginx.unp.edu.ar.
+nginx.unp.edu.ar.                        10800    IN    A        170.210.88.21
+note-audio.unp.edu.ar.                   10800    IN    A        170.210.88.55
+ocs.unp.edu.ar.                          10800    IN    A        170.210.108.101
+www.oogsj.unp.edu.ar.                    10800    IN    CNAME    informatica.unp.edu.ar.
+peip.unp.edu.ar.                         10800    IN    CNAME    nginx.unp.edu.ar.
+pfsense1.unp.edu.ar.                     10800    IN    CNAME    wanriu.unp.edu.ar.
+pmg.unp.edu.ar.                          10800    IN    A        170.210.88.254
+pop.unp.edu.ar.                          10800    IN    CNAME    unpata.unp.edu.ar.
+pop3.unp.edu.ar.                         10800    IN    CNAME    unpata.unp.edu.ar.
+www.posgradoscomodoro.unp.edu.ar.        10800    IN    CNAME             (
+puam.unp.edu.ar.                         10800    IN    CNAME    nginx.unp.edu.ar.
+www.puam.unp.edu.ar.                     10800    IN    CNAME    nginx.unp.edu.ar.
+radiouniversidad.unp.edu.ar.             10800    IN    CNAME    fproxy.unp.edu.ar.
+www.radiouniversidad.unp.edu.ar.         10800    IN    CNAME    fproxy.unp.edu.ar.
+www.rdi.unp.edu.ar.                      10800    IN    A        170.210.88.21
+relay1.unp.edu.ar.                       10800    IN    A        170.210.88.3
+www.revistas.unp.edu.ar.                 10800    IN    CNAME    nginx.unp.edu.ar.
+www.roa.unp.edu.ar.                      10800    IN    CNAME    ccfi.com.ar.
+router-unpsjb.unp.edu.ar.                10800    IN    A        170.210.88.1
+www.rrhh.unp.edu.ar.                     10800    IN    CNAME    informatica.unp.edu.ar.
+www.rtsg.unp.edu.ar.                     10800    IN    CNAME    phoenix.ing.unp.edu.ar.
+sca.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+scup.unp.edu.ar.                         10800    IN    CNAME    nginx.unp.edu.ar.
+secacadem.unp.edu.ar.                    10800    IN    CNAME    nginx.unp.edu.ar.
+sftpinfo.unp.edu.ar.                     10800    IN    CNAME    sftpinformatica.unp.edu.ar.
+www.sigacui.unp.edu.ar.                  10800    IN    CNAME    nginx.unp.edu.ar.
+www.siu-wichi.unp.edu.ar.                10800    IN    CNAME    nginx.unp.edu.ar.
+smtp.unp.edu.ar.                         10800    IN    CNAME    unpata.unp.edu.ar.
+sparc5.unp.edu.ar.                       10800    IN    CNAME    fproxy.unp.edu.ar.
+www.test-pil.unp.edu.ar.                 10800    IN    CNAME    nginx.unp.edu.ar.
+www.trelew.unp.edu.ar.                   10800    IN    CNAME    nginx.unp.edu.ar.
+tw.unp.edu.ar.                           10800    IN    MX                1
+unifi-video.unp.edu.ar.                  10800    IN    A        170.210.88.6
+www.univerano.unp.edu.ar.                10800    IN    CNAME    nginx.unp.edu.ar.
+unpata.unp.edu.ar.                       10800    IN    A        170.210.88.3
+www.unpsiu.unp.edu.ar.                   10800    IN    CNAME    informatica.unp.edu.ar.
+vc-ingenieria.unp.edu.ar.                10800    IN    A        170.210.88.102
+vc-rectorado.unp.edu.ar.                 10800    IN    A        170.210.88.2
+vpn.unp.edu.ar.                          10800    IN    A        170.210.88.10
+wanriu.unp.edu.ar.                       10800    IN    A        170.210.88.5
+webcalendar.unp.edu.ar.                  10800    IN    CNAME    nginx.unp.edu.ar.
+webmail.unp.edu.ar.                      10800    IN    CNAME    nginx.unp.edu.ar.
+wiki.unp.edu.ar.                         10800    IN    CNAME    nginx.unp.edu.ar.
+www.unp.edu.ar.                          10800    IN    CNAME    nginx.unp.edu.ar.
+[1;31m
+
+Brute forcing with file.txt:
+_____________________________
+
+[0m[1;31m
+
+unp.edu.ar class C netranges:
+______________________________
+
+[0m 138.36.97.0/24
+ 168.226.35.0/24
+ 170.210.88.0/24
+ 170.210.108.0/24
+ 186.129.250.0/24
+[1;31m
+
+Performing reverse lookup on 1280 ip addresses:
+________________________________________________
+
+[0m1.88.210.170.in-addr.arpa.               10800    IN    PTR      router-unpsjb.unp.edu.ar.
+2.88.210.170.in-addr.arpa.               10800    IN    PTR      vc-rectorado.unp.edu.ar.
+3.88.210.170.in-addr.arpa.               10800    IN    PTR      unpata.unp.edu.ar.
+
+3 results out of 1280 IP addresses.
+[1;31m
+
+unp.edu.ar ip blocks:
+______________________
+
+[0m 170.210.88.1/32
+ 170.210.88.2/31
+
+done.
