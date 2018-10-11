@@ -461,19 +461,92 @@ Para lograr este nuevo objetivo, una solución sencilla sería añadir la siguie
 \end{center}
 
 
+\subsection{\emph{IPTables}}
+
+\subsubsection{Topología \emph{LAN}}
+
+Para automatizar la obtención de información sobre interfaces de red y estado de los puertos de cada \emph{host} emulado con CORE, se utilizó el \emph{script} \dq{get-info.sh} (que se puede encontrar en el directorio \dq{assets/iptables}). Las salidas de las ejecuciones en cada nodo se pueden encontrar en el directorio \dq{assets/iptables/output-lan}.
+
+Al ejecutar el comando \texttt{iptables -nL -v} en el nodo \emph{n1} (servidor), se obtiene la siguiente salida: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{iptables_server}
+    \caption{Ningua regla configurada todavía}
+\end{figure}
+
+\subsubsection*{Casos de configuración}
+
+\emph{\textbf{CASO 1:} Configure el firewall del Servidor Web para aceptar solamente conexiones al puerto 80 utilizando una política restrictiva} 
+~\\
+
+\begin{itemize}
+    \item Configuración del servidor:
+    \begin{itemize}
+        \item \texttt{iptables -P INPUT DROP} 
+        \item \texttt{iptables -A INPUT -p tcp --dport 80 -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_lan_caso1}
+    \end{figure}
+\end{itemize}
+
+\emph{\textbf{CASO 2:} Configure el firewall del Servidor Web para aceptar solamente conexiones al puerto 80 utilizando una política permisiva} 
+~\\
+
+\begin{itemize}
+    \item Configuración del servidor:
+    \begin{itemize}
+        \item \texttt{iptables -P INPUT ACCEPT} 
+        \item \texttt{iptables -A INPUT -p tcp --dport 0:79 -j DROP} 
+        \item \texttt{iptables -A INPUT -p tcp --dport 81:65535 -j DROP} 
+        \item \texttt{iptables -A INPUT -p tcp --dport 80 -m state --state RELATED,ESTABLISHED -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_lan_caso2}
+    \end{figure}
+\end{itemize}
+
+\emph{\textbf{CASO 3:} Configure el firewall del Servidor Web para redireccionar toda petición al puerto TCP 8080 al puerto TCP 80 del mismo equipo} 
+~\\
+
+\begin{itemize}
+    \item Configuración del servidor:
+    \begin{itemize}
+        \item \texttt{iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -t nat -nL -v} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_lan_caso3}
+    \end{figure}
+\end{itemize}
+
+\emph{\textbf{CASO 4:} Configure el firewall del Cliente de modo que, para cualquiera de los puntos anteriores, el mismo pueda establecer hacia el Servidor cualquier tipo de comunicación (siempre y cuando el Servidor se lo permita), pero sin permitir que el Web Server pueda iniciar comunicaciones nuevas hacia él} 
+~\\
+
+\begin{itemize}
+    \item Configuración del nodo:
+    \begin{itemize}
+        \item \texttt{iptables -A OUTPUT -d 10.0.0.10 -p tcp -j ACCEPT} 
+        \item \texttt{iptables -A INPUT -s 10.0.0.10 -m state --state NEW -j DROP} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -t nat -nL -v} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_lan_caso4}
+    \end{figure}
+\end{itemize}
 
 
 
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIN DOCUMENTO, AHORA REFERENCIAS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \printbibliography
-
 \end{document}
