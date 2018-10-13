@@ -502,7 +502,6 @@ Al ejecutar el comando \texttt{iptables -nL -v} en el nodo \emph{n1} (servidor),
         \item \texttt{iptables -P INPUT ACCEPT} 
         \item \texttt{iptables -A INPUT -p tcp --dport 0:79 -j DROP} 
         \item \texttt{iptables -A INPUT -p tcp --dport 81:65535 -j DROP} 
-        \item \texttt{iptables -A INPUT -p tcp --dport 80 -m state --state RELATED,ESTABLISHED -j ACCEPT} 
     \end{itemize}
     \item Salida de \texttt{iptables -nL -v} 
     \begin{figure}[H]
@@ -541,6 +540,168 @@ Al ejecutar el comando \texttt{iptables -nL -v} en el nodo \emph{n1} (servidor),
         \includegraphics[width=0.8\linewidth]{iptables_lan_caso4}
     \end{figure}
 \end{itemize}
+
+\subsubsection{Topología ruteada}
+
+Al igual que con la topología anterior, se utilizó el \emph{script} \dq{get-info.sh} para recuperar la información de cada nodo (los archivos de salida se pueden encontrar en \dq{assets/iptables/output-ruteada}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{ping-al-server}
+    \caption{Nodo \emph{n2} haciendo \texttt{ping} al servidor \emph{n1}}
+\end{figure}
+
+Modificando las reglas de \texttt{iptables} del router \emph{n5} para que no deje pasar los paquetes que no salen de él ni tampoco son para él (\texttt{iptables -P FORWARD DROP}), los mensajes de \texttt{ping} de los nodos \emph{n2} y \emph{n3} no llegan a destino. Los mensajes vuelven a llegar a destino una vez removida la regla (\texttt{iptables -P FORWARD ACCEPT}).
+
+~\\
+
+El archivo \dq{n1-con-servidores} ubicado en el directorio \dq{assets/iptables/output-ruteada} contiene la salida de los comandos \texttt{netstat -nat} y \texttt{netstat -nau}, ejecutados en el nodo \emph{n1} (el servidor). 
+
+\subsubsection*{\emph{Firewall} con estados (\emph{stateful})}
+
+A continuación se indican las siguientes reglas a aplicar en el \emph{router-firewall}.
+
+\emph{Utilizar política restrictiva} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}: 
+    \begin{itemize}
+        \item \texttt{iptables -P FORWARD DROP} 
+        \item \texttt{iptables -P INPUT DROP} 
+        \item \texttt{iptables -P OUTPUT DROP} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall}  
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_ruteada_caso1}
+    \end{figure}
+\end{itemize}
+
+\emph{Permitir únicamente el acceso desde la LAN a los servicios FTP, SSH, y HTTP que corren en el servidor} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}:
+    \begin{itemize}
+        \item \texttt{iptables -A FORWARD -s 10.0.0.0/24 -d 10.0.1.10 -p tcp -m multiport --dports 21,22,80 -j ACCEPT} 
+        \item \texttt{iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall}  
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_ruteada_caso2}
+    \end{figure}
+\end{itemize}
+
+\emph{Ninguna otra comunicación hacia el router-firewall debe permitirse, ya sea desde la LAN como desde el Servidor.} 
+~\\
+
+\begin{itemize}
+    \item Al ser una política restrictiva, y aplicar la regla \texttt{INPUT DROP}, esta condición se cumple.
+\end{itemize}
+
+\emph{Desde el firewall se deben poder iniciar conexiones SSH y HTTPS al servidor} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}: 
+    \begin{itemize}
+        \item \texttt{iptables -A OUTPUT -d 10.0.1.10 -p tcp -m multiport --dports 22,443 -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_ruteada_caso3}
+    \end{figure}
+\end{itemize}
+
+\emph{Desde el servidor se debe permitir el acceso al servicio SSH de las PCs de la LAN} 
+~\\
+
+Las siguientes reglas se deben aplicar en el nodo \emph{n1} (servidor):
+
+\begin{itemize}
+    \item Configuración del servidor:
+    \begin{itemize}
+        \item \texttt{iptables -A INPUT -s 10.0.0.0/24 -p tcp --dport 22 -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el servidor
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{iptables_ruteada_caso4}
+    \end{figure}
+\end{itemize}
+
+\subsubsection*{\emph{Firewall} sin estados (\emph{stateless})}
+
+\emph{Configure el firewall con una política restrictiva y sin estados, de modo que se permita únicamente el acceso desde el cliente al servidor, a los servicios de FTP, SSH y HTTP} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}:
+    \begin{itemize}
+        \item \texttt{iptables -P INPUT DROP} 
+        \item \texttt{iptables -P FORWARD DROP} 
+        \item \texttt{iptables -P OUTPUT DROP} 
+        \item \texttt{iptables -A FORWARD -s 10.0.0.0/24 -d 10.0.1.10 -p tcp -m multiport --dports 21,22,80 -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{iptables_ruteada_stateless}
+    \end{figure}
+\end{itemize}
+
+\emph{Desde el firewall se deben poder iniciar conexiones SSH al servidor} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}:
+    \begin{itemize}
+        \item \texttt{iptables -A OUTPUT -d 10.0.1.10 -p tcp --dport 22 -j ACCEPT} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{iptables_ruteada_stateless_ssh}
+    \end{figure}
+\end{itemize}
+
+\emph{Idem punto anterior pero con una política permisiva} 
+~\\
+
+\begin{itemize}
+    \item Configuración del \emph{firewall}:
+    \begin{itemize}
+        \item \texttt{iptables -P INPUT ACCEPT} 
+        \item \texttt{iptables -P FORWARD ACCETP} 
+        \item \texttt{iptables -P OUTPUT ACCEPT} 
+        \item \texttt{iptables -A FORWARD -s 10.0.0.0/24 -d 10.0.1.10 -p tcp -m multiport --dports 0:20,23:79,81:65535 -j DROP} 
+    \end{itemize}
+    \item Salida de \texttt{iptables -nL -v} en el \emph{firewall} 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{iptables_ruteada_stateless_permisiva}
+    \end{figure}
+\end{itemize}
+
+\subsubsection*{Configuración hogareña}
+
+Para configurar un \emph{firewall} de modo que se permita que un cliente de la red puede realizar cualquier tipo de conexión (a servidores web) hacia fuera de la red (Internet), pero que desde Internet no puedan ingresar comunicaciones, se deben aplicar las siguientes reglas:
+
+\begin{itemize}
+    \item \texttt{iptables -P FORWARD DROP} - política restrictiva 
+    \item \texttt{iptables -A FORWARD -s 192.168.0.0/24 -p tcp --dport 80 -j ACCEPT} - se deja pasar todo el tráfico interno que quiera ir hacia afuera de la red, a algún servidor web
+    \item \texttt{iptables -A FORWARD -p tcp --sport 80 -d 192.168.0.0/24 -m state --state RELATED,ESTABLISHED -j ACCEPT} - el único tráfico que se deja ingresar a la red es el que está relacionado con alguna conexión previamente realizada  
+\end{itemize}
+
+
+\subsection{Comparación entre \emph{stateful} y \emph{stateless}}
+
+No se puede definir si es una alternativa es mejor que la otra tan sencillamente; la decisión de elegir uno u el otro depende mucho de la situación en la que se tenga que implementar el \emph{firewall} y con qué recursos se cuente.
+
+    Los \emph{firewall} \emph{sin estado} (\emph{stateless}) son más rápidos y funcionan más eficientemente (realizan el filtrado en base a campos estáticos de los paquetes, como pueden ser direcciones IP o puertos de origen y/o destino). Por su lado, los \emph{firewall} \emph{con estado} (\emph{stateful}) son mejores para detectar conexiones no autorizadas o falsificadas, gracias a su capacidad de tener una visión general del estado de la red, y su habilidad para \emph{contextualizar} el tráfico \autocite{FirewallStatelessVsStateful}. 
 
 
 

@@ -1,0 +1,38 @@
+*** ifconfig ***
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.10  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::200:ff:feaa:1  prefixlen 64  scopeid 0x20<link>
+        inet6 2001::10  prefixlen 64  scopeid 0x0<global>
+        ether 00:00:00:aa:00:01  txqueuelen 1000  (Ethernet)
+        RX packets 45  bytes 3325 (3.3 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 37  bytes 2906 (2.9 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+***netstat -nr ***
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         10.0.0.1        0.0.0.0         UG        0 0          0 eth0
+10.0.0.0        0.0.0.0         255.255.255.0   U         0 0          0 eth0
+
+***netstat -natp (TCP)***
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:9000            0.0.0.0:*               LISTEN      2811/ncat           
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      402/sshd            
+tcp6       0      0 :::9000                 :::*                    LISTEN      2811/ncat           
+tcp6       0      0 :::22                   :::*                    LISTEN      402/sshd            
+
+***netstat -naup (UDP)***
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
