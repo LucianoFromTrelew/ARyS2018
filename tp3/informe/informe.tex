@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'includes.tex' se encuentran la importación de paquetes necesarios
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{project_settings}
+\input{listings_settings}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'titlepage.tex' se encuentra la página de título
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INDICE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\clearpage 
+
+\lstset{style=bashstyle}
+
+\section{Conceptos básicos}
+
+\emph{Juan quiere mandarle un mensaje a Julio. A Julio no le importa asegurarse que el mensaje fue enviado por Juan, sin embargo Juan quiere estar seguro de que el mensaje no podra ser leído ni alterado por un tercero. Juan trabaja en una empresa en Argentina y Julio es empleado de una empresa ubicada en España} 
+
+Para esta situación, un sistema de cifrado simétrico no cumpliría los requisitos solicitados; en el caso de que la clave compartida sea interceptada, la comunicación puede ser espiada por un tercero. Sin embargo, si se garantiza un canal seguro para transmitir la clave privada al inicio de la comunicación, sí se podría utilizar un cifrado simétrico. En caso de que esto último no sea posible, la alternativa sería usar un sistema de cifrado asimétrico, donde el emisor encripta el mensaje con la clave pública del receptor, y el receptor desencripta el mensaje recibido con su clave privada.
+
+\vspace*{5mm}
+\emph{Adriana y Leandro quieren comunicarse en forma segura. Para ellos resulta facil conseguir un medio seguro para intercambiar informacion que luego necesiten para realizar esta comunicacion segura. En este caso lo que importa es que nadie pueda espiar los datos involucrados en dicha comunicación} 
+~\\
+
+Debido a que se cuenta con un canal seguro, se lo podría utilizar para compartir una clave, la cual se utilizará para cifrar los mensajes intercambiados de forma simétrica.
+
+\vspace*{5mm}
+\emph{Analía usara el correo electrónico para enviar la aceptación de un contrato al estudio en el cual trabaja. Para la persona que lo reciba es importante tener la garantía de que el mismo fue enviado efectivamente por Analía} 
+
+Lo adecuado para esta situación sería que el correo enviado por Analía sea firmado utlizando la clave privada de Analía.
+
+\vspace*{5mm}
+\rule{.9\linewidth}{0.3mm}
+
+\subsection{Verdadero o falso}
+
+\emph{En los criptosistemas simétricos no puede garantizarse el no repudio porque ambas partes de la transacción conocen la clave utilizada} 
+
+\textbf{Falso}. Si la clave compartida no fue transmitida por un canal seguro puedo haber sido interceptada, logrando que un tercero envíe un mensaje encriptado. 
+
+\vspace*{5mm}
+\emph{Si únicamente me importara la eficiencia del método que uso para encriptar, debería optar por un algoritmo de cifrado asimétrico} 
+
+\textbf{Falso}. Si se busca eficiencia, la encriptación asimétrica se debería evitar. La encriptación simétrica es mucho más rápida y no incrementa el tamaño del mensaje. 
+
+\vspace*{5mm}
+\emph{Con ambos tipos de criptosistemas necesito contar con un mecanismo seguro para transmitir la clave} 
+
+\textbf{Falso}. Con los criptosistemas asimétricos, no es necesario que las claves públicas sean compartidas de forma segura (se pueden alojar en un servidor o un repositorio para que disintios usuarios la consigan).
+
+\section{\emph{PKI}}
+
+Para poder verificar la firma de un correo eletrónico, el receptor necesita la \textbf{clave pública} del emisor. 
+
+Al enviar un mensaje firmado, el emisor genera un \emph{resumen} del mensaje (con alguna función de \emph{hashing}), y luego lo encripta con su \textbf{clave privada}, generando así la \textbf{firma digital}. 
+
+El receptor también genera el resumen del mensaje (con el mismo algoritmo), y desencripta la firma con la \textbf{clave pública} del emisor (el receptor debía contar con la clave pública del emisor o la debe poder conseguir ya sea a través de un \emph{certificado} o de un repositorio). Luego compara el resumen que él generó, y el que recibió del emisor. Si son iguales, entonces la firma es considerada válida; si no son iguales, entonces significa que se utilizó una clave distinta para firmar el mensaje, o fue alterado.
+
+Ahora bien, si el mensaje está encriptado, para poder abrirlo el receptor necesita su \textbf{clave privada}, ya que el mensaje debió ser cifra con la \textbf{clave pública} del receptor. 
+
+\subsection{Instalando un certificado en Firefox}
+
+\begin{itemize}
+    \item Algoritmo de firma utilizado: \texttt{PKCS #1 MD5 With RSA Encryption} 
+    \item Cantidad de bits de cifrado: \texttt{4096 bits} 
+    \item Periodo de validez: desde el \texttt{30/03/2003} hasta el \texttt{29/03/2033} 
+    \item Emisor:
+    \begin{itemize}
+        \item E = support@cacert.org
+        \item CN = CA Cert Signing Authority
+        \item OU = http://www.cacert.org
+        \item O = Root CA
+    \end{itemize}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIN DOCUMENTO, AHORA REFERENCIAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\printbibliography
+
+\end{document}
