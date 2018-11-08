@@ -65,12 +65,12 @@ Al enviar un mensaje firmado, el emisor genera un \emph{resumen} del mensaje (co
 
 El receptor también genera el resumen del mensaje (con el mismo algoritmo), y desencripta la firma con la \textbf{clave pública} del emisor (el receptor debía contar con la clave pública del emisor o la debe poder conseguir ya sea a través de un \emph{certificado} o de un repositorio). Luego compara el resumen que él generó, y el que recibió del emisor. Si son iguales, entonces la firma es considerada válida; si no son iguales, entonces significa que se utilizó una clave distinta para firmar el mensaje, o fue alterado.
 
-Ahora bien, si el mensaje está encriptado, para poder abrirlo el receptor necesita su \textbf{clave privada}, ya que el mensaje debió ser cifra con la \textbf{clave pública} del receptor. 
+Ahora bien, si el mensaje está encriptado, para poder abrirlo el receptor necesita su \textbf{clave privada}, ya que el mensaje debió ser cifrado con la \textbf{clave pública} del receptor. En caso de que el mensaje hubiese sido cifrado con la \textbf{clave privada} del emisor, cualquier tercero que tenga la \textbf{clave pública} del emisor podrá desencriptarlo.
 
 \subsection{Instalando un certificado en Firefox}
 
 \begin{itemize}
-    \item Algoritmo de firma utilizado: \texttt{PKCS #1 MD5 With RSA Encryption} 
+    \item Algoritmo de firma utilizado: \texttt{PKCS \#1 MD5 With RSA Encryption} 
     \item Cantidad de bits de cifrado: \texttt{4096 bits} 
     \item Periodo de validez: desde el \texttt{30/03/2003} hasta el \texttt{29/03/2033} 
     \item Emisor:
@@ -81,6 +81,87 @@ Ahora bien, si el mensaje está encriptado, para poder abrirlo el receptor neces
         \item O = Root CA
     \end{itemize}
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-cacert-certificado-instalado.png}
+    \caption*{Certificado de CACert instalado en Firefox}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{images/arys-tp3-cacert-con-https.png}
+    \caption*{Ingresando a CACert con HTTPS}
+\end{figure}
+
+\subsection{Certificado personal}
+
+Después de generar el certificado personal para la dirección de correo electrónico \emph{lucianoserruya@gmail.com} e instalarlo en Firefox, se puede ver el siguiente certificado instalado 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-cacert-certificado-gmail.png}
+    \caption*{Certificado personal instalado en Firefox}
+\end{figure}
+
+\subsection{Correos electrónicos firmados y encriptados}
+
+\emph{Para los siguientes experimentos que se muestran a continuación, se utilizaron dos cuentas personales: \emph{lucianoserruya@gmail.com} y \emph{lucianoserruya@hotmail.com}. Para ambas cuentas se generaron los respectivos certificados en CACert y se instalaron correctamente en Thunderbird} 
+
+\vspace*{5mm}
+
+Una vez instalados los certificados de ambas cuentas en Thunderbird, se realizaron los siguientes experimentos:
+
+\begin{itemize}
+    \item Enviar un correo firmado - el emisor necesita su clave privada para encriptar la firma, y el receptor necesita la clave pública del emisor para poder verificarla
+    \item Enviar un correo encriptado - el emisor necesita la clave pública del receptor para encriptar el mensaje, y el receptor necesita su clave privada para poder desencriptarlo
+    \item Enviar un correo firmado y encriptado - se tienen que cumplir las dos condiciones anteriores
+\end{itemize}
+
+A continuación se incluyen capturas de pantalla de los correos electrónicos enviados. Como el mismo cliente tiene tanto las claves privadas como las públicas de ambas cuentas, se pudieron realizar los experimentos sin incovenientes.
+
+Thunderbird indica con un logo de un candado a los correos que hayan sido encriptados, y con un sobre a aquellos que fueron firmados (y que se pudo validar la firma).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-correo-firmado.png}
+    \caption*{Correo firmado}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-correo-encriptado.png}
+    \caption*{Correo encriptado}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-correo-firmado-encriptado.png}
+    \caption*{Correo firmado y encriptado}
+\end{figure}
+
+
+
+\subsection{Análisis sobre una clave privada robada}
+
+La infraestructura de PKI brinda un elemento esencial una situación de este tipo. Este se llama \textbf{\emph{Certificate Revocation List} (\emph{CRL})}, es un repositorio que mantiene la \emph{CA} (\emph{Certificate Authority}, ente encargado de emitir los certificados) con los certificados que dejaron de ser válido (que fueron revocados, los certificados expirados no entran en esta lista). 
+
+\subsubsection{Cómo actuar}
+
+Tanto si la clave privada fue robada como si fue robada y además eliminada de la máquina del dueño, lo primero que se debe hacer es \textbf{revocar los certificados} que corresponden a esa clave privada. Para ello se debe agregar el número de identificación del certificado a la \emph{CRL} de la \emph{CA} correspondiente.  
+
+Cuando un cliente pida el certificado del servidor cuya clave privada fue comprometida, lo rechazará y pedirá uno nuevo al verificar que ese certificado se encuentra en la \emph{CRL}. 
+
+\subsubsection{Consecuencias con la información encriptada}
+
+Como la clave privada es la que usa utiliza para desencriptar mensajes, estando comprometida un tercero podría desencriptar los mensajes que vayan hacia el dueño original de la clave.
+
+\subsubsection{Consecuencias con la información firmada}
+
+Para firmar se utiliza la clave privada, por lo tanto alguien más podría firmar documentos haciéndose pasar por el dueño de la clave.
+
+
+
 
 
 
