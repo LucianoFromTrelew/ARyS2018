@@ -161,14 +161,180 @@ Como la clave privada es la que usa utiliza para desencriptar mensajes, estando 
 Para firmar se utiliza la clave privada, por lo tanto alguien más podría firmar documentos haciéndose pasar por el dueño de la clave.
 
 
+\section{\emph{PGP}}
+
+\emph{Al igual que en la sección anterior, para las pruebas de firmar y encriptar correos electrónicos con PGP, se utilizaron las mismas cuentas} 
+
+\vspace*{5mm}
+
+\subsection{Crear claves \emph{PGP} con \texttt{gpg}}
+
+Para crear las claves PGP utilizando la aplicación de línea de comando \texttt{gpg}, se debe ejecutar el siguiente comando:
+
+\begin{lstlisting}
+gpg --gen-key 
+\end{lstlisting}
+
+A continuación se detallan los datos que son requeridos por la aplicación para crear el par de claves
+
+\begin{itemize}
+    \item Algoritmos de encriptación
+    \item Tamaño (en bits) de la clave
+    \item Tiempo máximo de validez de la clave
+    \item Nombre real/nombre de usuario
+    \item Dirección de correo electrónico
+    \item Comentario
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-gpg-claves-publicas.png}
+    \caption*{Claves públicas PGP}
+\end{figure}
+
+Una vez creado el par de claves, a través del complento de Thunderbird, \emph{Enigmail}, se pueden cargar al cliente de correo para poder encriptar y firmar los correos con estas claves
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-claves-pgp-thunderbird.png}
+    \caption*{Claves públicas cargadas en Thunderbird}
+\end{figure}
+
+\subsubsection{Prueba de correo firmado y encriptado}
+
+A continuación se muestran capturas de un correo electrónico firmado y encriptado con PGP, enviado desde la cuenta \emph{lucianoserruya@hotmail.com} a la cuenta \emph{lucianoserruya@gmail.com}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-correo-firmado-encriptado-pgp.png}
+    \caption*{Enviado correo firmado y encriptado}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-correo-recibido-firmado-encriptado-pgp.png}
+    \caption*{Correo recibido correctamente}
+\end{figure}
+
+
+\subsection{Relaciones de confianza}
+
+Una vez importadas las claves de las cuentas \emph{bruno.zappellini@gmail.com} y \emph{bzappellini@juschubut.gov.ar}, el estado de validez de las claves es el siguiente:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\linewidth]{images/arys-tp3-clave-pgp-gmail-zape.png}
+    \caption*{Clave para \emph{bruno.zappellini@gmail.com}}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\linewidth]{images/arys-tp3-clave-pgp-juschubut-zape.png}
+    \caption*{Clave para \emph{bzappellini@juschubut.gov.ar}}
+\end{figure}
+
+Ahora bien, como la segunda clave está firmada por la primera, si se certifica que la primera es de quién dice ser (con la opción \texttt{Certify} en Thunderbird), la segunda automáticamente también estaría certificada. Este compartamiento se debe al \emph{\textbf{modelo de confianza}} de PGP.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/arys-tp3-clave-pgp-gmail-zape-confiada.png}
+    \caption*{Clave para \emph{bruno.zappellini@gmail.com} certificada - \emph{se le concedieron los máximos niveles de confianza}}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/arys-tp3-clave-pgp-juschubut-zape-confiada.png}
+    \caption*{La clave para \emph{bzappellini@juschubut.gov.ar} es validada automáticamente por el \emph{modelo de confianza}}
+\end{figure}
+
+\subsubsection{Cambiando confianza de las claves}
+
+Al recibir un correo de la cuenta \emph{bruno.zappellini@gmail.com} teniendo la clave PGP sin verificar, el cliente Thunderbird indica que se pudo verificar la firma digital, pero muestra una salida distinta
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-clave-pgp-sin-verificar.png}
+    \caption*{Clave PGP sin verificar}
+\end{figure}
+
+Ahora bien, si verificamos que la clave es de su dueño, certificándolo con nuestra clave privada, Thunderbird muestra la firma de otra manera
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-clave-pgp-verificada.png}
+    \caption*{Clave PGP verificada con nuestra clave privada}
+\end{figure}
+
+\subsection{Mecanismo de firma y encriptación con PGP}
+
+PGP al ser un sistema de encriptación \textbf{asimétrico}, utiliza la \textbf{clave privada} para firmar los documentos, y la \textbf{clave pública del receptor} para encriptarlos.   
+
+\subsection{Situaciones de confianza de una clave}
+
+Un cliente de correo (como Thunderbird, por ejemplo) puede confiar en una clave PGP (que no sea nuestra) por alguna de las siguientes razones:
+
+\begin{itemize}
+    \item El usuario explícitamente decidió confiar en dicha clave (firmando la misma) - relación de confianza \textbf{directa} 
+    \item Se puede establecer una relación de confianza \textbf{indirecta}
+    \begin{itemize}
+        \item El dueño de alguna clave de la cual confiamos plenamente (confianza \emph{FULL}) firmó la clave
+        \item La clave fue firmada por \emph{X} claves en las que confiamos marginalmente (confianza \emph{MARGINAL}) 
+    \end{itemize}
+\end{itemize}
+
+
+\subsection{Análisis sobre una clave privada robada}
+
+PGP permite \textbf{revocar} claves a través de \textbf{certificados de revocación de claves}, ya sea porque se cambió de clave o porque la clave privada fue comprometida. 
+
+Cuando una clave es revocada, PGP debe contactar a los servidores en los cuales esté alojada la clave pública para actualizar su estado. De esta forma, cuando otros usuarios quieran actualizar la clave pública desde el servidor, estos se enterarán que está revocada.
+
+Ahora bien, para generar el certificado de revocación se necesita tanto la \textbf{clave privada}, como su \textbf{contraseña}. 
+
+\subsubsection{Cómo actuar}
+
+Si la clave privada fue comprometida \textbf{pero todavía está presente en la máquina del dueño}, se puede generar un certificado de revocación para revocarla.
+
+Si la clave privada fue comprometida y eliminada de la máquina del dueño, \textbf{no hay nada que se pueda hacer}; se necesitan las dos partes (la clave privada y su contraseña) para generar el certificado de revocación. 
+
+\subsubsection{Consecuencias con la información encriptada}
+
+Aquel que posea la clave privada podrá desencriptar la información que iba encriptada para el dueño original.
+
+\subsubsection{Consecuencias con la información firmada}
+
+El usuario que tenga la clave privada podrá firmar correos haciéndose pasar por el dueño original.
 
 
 
+\section{Criptografía simétrica y esteganografía}
 
+\subsection{Encriptando archivos con \texttt{gpg}}
 
+La aplicación \texttt{gpg} permite generar pares de claves asimétricas PGP y también permite encriptar \textbf{simétricamente} un archivo; según las páginas \texttt{man}, el algoritmo por defecto para encriptación simétrica es  \textbf{AES-128} (se puede cambiar utilizando el parámetro \texttt{--cipher-algo}).   
 
+Se puede crear un nuevo archivo y encriptarlo con \texttt{gpg} de la siguiente manera
 
+\begin{lstlisting}
+echo "Un mensaje secreto" > secreto.txt
+gpg -c secreto.txt
+\end{lstlisting}
 
+La aplicación levantará una ventana para ingresar una contraseña, y luego confirmarla; con dicha clave se encriptará el archivo de forma simétrica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-pgp-simetrico.png}
+    \caption*{Archivo encriptado y no encriptado - el archivo encriptado es considerablemente mayor}
+\end{figure}
+
+Para desencriptarlo, sencillamente se debe ejecutar el comando
+
+\begin{lstlisting}
+gpg -d secreto.txt.gpg > secreto_desencriptado.txt
+\end{lstlisting}
+
+Ingresar la contraseña con la que se encriptó el mensaje.
 
 
 
