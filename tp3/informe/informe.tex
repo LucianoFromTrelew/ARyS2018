@@ -337,6 +337,48 @@ gpg -d secreto.txt.gpg > secreto_desencriptado.txt
 Ingresar la contraseña con la que se encriptó el mensaje.
 
 
+\section{Esteganografía}
+
+Para el experimento realizado con la aplicación \texttt{steghide}, se utilizó un archivo que contenía texto \emph{lorem} de 400 líneas, y la siguiente imagen en la cual incrustar el archivo:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/arys-tp3-picardia.jpg}
+    \caption*{Imagen inicial (antes de incrustar el archivo de texto)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-esteganografia-archivo.png}
+    \caption*{Archivo de 400 líneas a incrustar}
+\end{figure}
+
+Luego, al ejecutar el comando de \texttt{steghide} de la siguiente forma 
+
+\begin{lstlisting}
+steghide embed -cf arys-tp3-picardia-incrustado.jpg -ef archivo.txt 
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{images/arys-tp3-esteganografia.png}
+    \caption*{La imagen con el archivo de texto incrustado es 1KB mayor que la original}
+\end{figure}
+
+Se obtiene la siguiente imagen (la aplicación solicitará una contraseña para encriptar los datos)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{images/arys-tp3-picardia-incrustado.jpg}
+    \caption*{Imagen con texto incrustado}
+\end{figure}
+
+Por último, para recuperar el archivo incrustado, se debe ejectuar nuevamente el comando \texttt{steghide} de la siguiente forma e ingresar la contraseña
+
+\begin{lstlisting}
+steghide -sf arys-tp3-picardia-incrustado.jpg
+\end{lstlisting}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
