@@ -1,0 +1,88 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'includes.tex' se encuentran la importación de paquetes necesarios
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{project_settings}
+\input{listings_settings}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'titlepage.tex' se encuentra la página de título
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INDICE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\clearpage 
+
+\lstset{style=bashstyle}
+
+\section{Sistema de autenticación de SSH}
+
+Según las páginas \texttt{man}, el comando \texttt{ssh-keygen} \emph{genera, gestiona, convierte, y autoriza claves para ssh. ssh-keygen puede generar claves para que las use SSH protocolo versión 2} 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/ssh-sin-clave.png}
+    \caption*{Creación de una llave SSH sin contraseña}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{images/ssh-con-clave.png}
+    \caption*{Creación de una llave SSH con contraseña \dq{unaClave}}
+\end{figure}
+
+\subsection{Archivos de autorización}
+
+Para gestionar el ingreso con \emph{clave pública} y para llevar registro de los sitios confiables a los cuales ya se ingresó, SSH mantiene dos archivos, respectivamente:
+
+\begin{itemize}
+    \item \emph{authorized\_keys}: lleva registro de las claves públicas aceptadas para conectarse vía SSH al sistema. Se podrán conectar con autenticación de clave pública sólo aquellos usuarios que tengan la correspondiente clave privada de la clave pública registrada en el archivo 
+    \item \emph{known\_hosts}: indica a los sitios que se conectó el usuario y son seguros (antes de establecer la conexión SSH con un sitio nuevo, el sistema pregunta si desea confiar en el sitio) 
+\end{itemize}
+
+\subsection{Ingresando a un servidor remoto con clave pública}
+
+Luego de registrar la clave pública personal en el servidor remoto y de haber configurado este último para que sólo permita ingresar (por SSH) mediante clave pública, se puede ingresar al servidor sin problemas.
+
+Gracias al \emph{log} que imprime SSH al ejecutarlo con la bandera \texttt{-vvv}, se puede ver la siguiente sección con respecto al ingreso con clave pública
+
+\begin{lstlisting}
+.
+.
+.
+debug1: Authentications that can continue: publickey
+debug3: start over, passed a different list publickey
+debug3: preferred publickey,keyboard-interactive,password
+debug3: authmethod_lookup publickey
+debug3: remaining preferred: keyboard-interactive,password
+debug3: authmethod_is_enabled publickey
+debug1: Next authentication method: publickey
+.
+.
+.
+\end{lstlisting}
+
+\section{Túneles}
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIN DOCUMENTO, AHORA REFERENCIAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\printbibliography
+
+\end{document}
