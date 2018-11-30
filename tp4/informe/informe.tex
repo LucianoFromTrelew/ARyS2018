@@ -70,6 +70,91 @@ debug1: Next authentication method: publickey
 
 \section{Túneles}
 
+\subsection{Locales}
+
+\emph{Ana es desarrolladora de aplicaciones web, y quiere probar algunos cambios con una base de datos de prueba que se encuentra en un servidor remoto. Ana no puede transferir la base de datos a su computadora, dado el excesivo tamaño de la misma. Sin embargo, Ana sabe que mediante la herramienta ssh puede hacer que su aplicación local utilice la base de datos remota} 
+\vspace*{5mm}
+
+La creación de un túnel SSH sería de igual manera para trabajar tanto con una base de datos MySQL como con una PostgreSQL, lo único que cambiaría es el puerto al cual redirigir la petición en el servidor remoto.
+
+Lo primero a tener en cuenta es que Ana debe poder ingresar al servidor remoto vía SSH, ya sea teniendo un usuario y contraseña en el servidor, o habiendo instalado su clave pública. Luego, debe saber qué puerto utiliza su aplicación para conectarse a la base de datos local.
+
+Suponiendo que la aplicación web de Ana utiliza el puerto 6060 para conectarse a la base de datos local, debería invocar SSH de la siguiente manera para crear un túnel:
+
+\begin{itemize}
+    \item MySQL: \texttt{ssh 6060:$<$IP\_SERVIDOR$>$:3306 $<$USUARIO\_ANA$>$@$<$IP\_SERVIDOR$>$} 
+    \item PostgreSQL: \texttt{ssh 6060:$<$IP\_SERVIDOR$>:$5432 $<$USUARIO\_ANA$>$@$<$IP\_SERVIDOR$>$} 
+\end{itemize}
+
+\subsection{Remotos}
+
+\emph{Matías tiene acceso a un servidor que escucha conexiones únicamente en el puerto 80, para las interfases de red físicas. Matías no puede alterar el firewall ya que no es administrador, sin embargo ha detectado que el servidor ejecuta un servicio SSH y no tiene restricciones para realizar conexiones salientes. Matías desea poder acceder al servidor SSH desde su computadora personal. Indique que con que argumentos debe invocar ssh desde el servidor (túnel reverso) para realizar la conexión desde su máquina personal} 
+\vspace*{5mm}
+
+En este caso, se necesita crear un túnel de tal forma que se pueda conectar la computadora personal de Matías con el servidor. Creando un túnel reverso \textbf{desde el servidor hacia la computadora personal} de Matías, el servidor abre un puerto en la computadora personal, redirigiendo todo el tráfico de ese puerto hacia un puerto propio del servidor.
+
+Para crear el túnel reverso, se debe invocar SSH de la siguiente manera:
+
+\begin{itemize}
+    \item \texttt{ssh -R 2020:localhost:22 $<$USUARIO\_MATIAS$>$@$<$IP\_MATIAS$>$} 
+\end{itemize}
+
+Nótese que el uso del puerto 2020 es arbitrario, se podría utilizar cualquier puerto que no se esté usando en la PC de Matías. Luego, Matías se podrá conectar al servidor haciendo:
+
+\begin{itemize}
+    \item \texttt{ssh -p 2020 $<$USUARIO\_SERVIDOR$>$@$<$IP\_SERVIDOR$>$} 
+\end{itemize}
+
+
+\emph{Marina desea acceder a un servidor que administra José, pero ambos se encuentran detrás de un router que realiza network address translation (NAT).  Marina sabe que ambos pueden acceder a un tercer host. Indique qué comandos debe realizar Marina o José, para poder tener acceso ssh entre los servidores de los extremos} 
+\vspace*{5mm}
+
+Al igual que el escenario anterior, esta situación se puede resolver con un \textbf{túnel reverso}. 
+
+Supóngase que Marina desea acceder a una aplicación web en el servidor de José, pero esta aplicación corre en el puerto 8080, y José no desea exponer los puertos de la máquina hacia afuera de la red. Teniendo José un acceso vía SSH al servidor público (el tercer host que se indica en el enunciado), puede crear el siguiente túnel reverso desde la máquina que corre la aplicación
+
+\begin{itemize}
+    \item \texttt{ssh -R 9000:localhost:8080 $<$USUARIO\_JOSE$>$@$<$IP\_SERVIDOR$>$} 
+\end{itemize}
+
+Ahora Marina podrá ingresar a la aplicación de José, navegando a la dirección \texttt{$<$IP\_SERVIDOR$>$:9000} 
+
+\section{Aplicaciones con interfaz gráfica}
+
+\emph{Ernesto sabe que en un servidor se está ejecutando el proceso X11. Desea ejecutar una aplicación gráfica remota (Por ej.: Firefox).  Describa que uso dio al cliente de ssh Ernesto}
+\vspace*{5mm}
+
+La bandera \texttt{-X} de SSH permite compartir el \emph{socket} de la instancia de X11 que se está corriendo en la máquina del cliente; de esta forma, se puede ejecutar una aplicación con interfaz gráfica en el servidor remoto (al cual se conectó mediante SSH), y ver la GUI en la máquina del cliente.  
+
+\section{Archivos de configuración de conexiones}
+
+Se desea confeccionar un archivo de configuración para manejar la siguiente conexión:
+
+\begin{itemize}
+    \item Se debe ejecutar con el comando \texttt{ssh servidor1} 
+    \item Dirección IP: 192.168.1.40
+    \item Nombre de usuario: \dq{administrador}
+    \item Puerto de la conexión: 22022
+    \item Autenticación por \emph{passphrase} desactivada 
+    \item Utilizar la clave ubicada en \emph{\$HOME/.ssh/keys/servidor1} 
+\end{itemize}
+
+\begin{lstlisting}
+Host servidor1
+    # IP a la cual conectarse
+    Host 192.168.1.40
+    # Usuario con el cual conectarse
+    User administrador
+    # Puerto donde escucha SSH
+    Port 22022
+    # Desactivar passphrase
+    BatchMode yes
+    # Utilizar key particular
+    IdentityFile ~/.ssh/keys/servidor1
+\end{lstlisting}
+
+
+
 
 
 
