@@ -154,6 +154,38 @@ Host servidor1
 \end{lstlisting}
 
 
+\section{Direccionamiento de puertos dinámico}
+
+Utilizando túneles locales o remotos, la intención es redirigir el tráfico de un puerto hacia un puerto de otra máquina. Si se desea redireccionar el tráfico de varias aplicaciones, se deben crear varios túneles. Esto resulta siendo tedioso y poco práctico.
+
+Con el \textbf{direccionamiento de puertos dinámico} (\emph{\textbf{Dynamic port forwarding}}), se inicia un servidor de proxy que implementa el protocolo \textbf{SOCKS} para redirigir el tráfico automáticamente según el protocolo de aplicación del que se trate. 
+
+Cabe aclarar lo siguiente, cuando se crea un túnel local o remoto, SSH no interpreta de ninguna manera el tráfico que fluye por el túnel; envía la información desde el puerto origen al puerto destino. Al crear un proxy SOCKS (con el parámetro de SSH \texttt{-D}), SSH actúa como un servidor proxy, manejando conexiones de varios puertos distintos (necesita interpretar el tráfico para determinar el puerto destino) \autocite{SODynamicPortForwarding}
+
+\subsection{Configuración de Firefox para usar un proxy SOCKS}
+
+\begin{enumerate}
+    \item Iniciar el servidor de proxy con la siguiente línea de SSH
+    \begin{itemize}
+        \item \texttt{ssh -D $<$PUERTO$>$ $<$USUARIO$>$@$<$HOST$>$} 
+    \end{itemize}
+    \item En Firefox, ir a \texttt{Edit} \textrightarrow \texttt{Preferences}  
+    \item Dirigirse a la sección de \texttt{Network Proxy} \textrightarrow \texttt{Setings...} 
+    \item Tildar \texttt{Manual proxy configuration} 
+    \item Borrar todos los campos texto, y en el campo de \texttt{SOCKS Host}, ingresar
+    \begin{itemize}
+        \item \texttt{127.0.0.1}, Puerto \texttt{1080}  
+    \end{itemize}
+\end{enumerate}
+
+Al utilizar el navegador con el proxy SOCKS configurado, las peticiones que realiza el navegador no tendrán como IP de origen la máquina en la cual está corriendo el navegador, sino que su IP origen será la de la máquina que esté corriendo el servidor proxy.
+
+\vspace*{5mm}
+
+La red TOR\footnote{Programa que protege y hace anónima la comunicación por Internet \autocite{TOR}} utiliza servidores de proxy SOCKS para hacer la navegación por Internet anónima; cada petición pasa por tres servidores de proxy distintos antes de llegar a destino
+
+
+
 
 
 
