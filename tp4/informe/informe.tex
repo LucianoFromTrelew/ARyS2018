@@ -169,8 +169,8 @@ Cabe aclarar lo siguiente, cuando se crea un túnel local o remoto, SSH no inter
     \begin{itemize}
         \item \texttt{ssh -D $<$PUERTO$>$ $<$USUARIO$>$@$<$HOST$>$} 
     \end{itemize}
-    \item En Firefox, ir a \texttt{Edit} \textrightarrow \texttt{Preferences}  
-    \item Dirigirse a la sección de \texttt{Network Proxy} \textrightarrow \texttt{Setings...} 
+    \item En Firefox, ir a \texttt{Edit} \textrightarrow{} \texttt{Preferences}  
+    \item Dirigirse a la sección de \texttt{Network Proxy} \textrightarrow{} \texttt{Setings...} 
     \item Tildar \texttt{Manual proxy configuration} 
     \item Borrar todos los campos texto, y en el campo de \texttt{SOCKS Host}, ingresar
     \begin{itemize}
@@ -183,6 +183,13 @@ Al utilizar el navegador con el proxy SOCKS configurado, las peticiones que real
 \vspace*{5mm}
 
 La red TOR\footnote{Programa que protege y hace anónima la comunicación por Internet \autocite{TOR}} utiliza servidores de proxy SOCKS para hacer la navegación por Internet anónima; cada petición pasa por tres servidores de proxy distintos antes de llegar a destino
+
+\subsection{\texttt{proxychains}}
+
+La herramienta \texttt{proxychains} fueza cualquier conexión TCP hecha por cualquier aplicación a que pase por un proxy como puede ser TOR o cualquier otro proxy SOCKS o HTTP \autocite{ProxyChainsHowTo}. 
+
+A diferencia de TOR o configurar SSH como proxy SOCKS, \texttt{proxychains} no es un proxy en sí, sino que redirige las comunicaciones TCP a los proxys configurados. La principal característica que tiene es que se pueden definir varios servidores de proxy por los cuales debe pasar la comunicación antes de llegar a destino.
+
 
 
 
