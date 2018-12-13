@@ -27,7 +27,7 @@ El presente trabajo de investigación se tratará sobre la \emph{criptomoneda}\f
 
 La primer parte explicará de manera amplia lo que es la criptografía, y hará hincapié en los tipos de criptografía que implementa el protocolo Bitcoin. También incluirá las funciones de \emph{hash} que utiliza, y los algoritmos de codificación. Luego, desarrollará sobre las transacciones en Bitcoin (su ciclo de vida y cómo son validadas), siempre incluyendo los elementos de criptografía utilizados.
 
-Por último, el trabajo explicará brevemente la red de comunicaciones en la que corre el protocolo Bitcoin -\emph{blockchain}- y cómo es la inclusión de nuevos datos a la red.
+Por último, el trabajo explicará brevemente la red de comunicaciones en la que corre el protocolo Bitcoin -\emph{blockchain}- y cómo es la inclusión de nuevos datos a la red (minería de bloques). También otro tema muy importante en el protocolo y con mucha presencia de la criptografía que son las \emph{billeteras} de bitcoin y cómo se generan. 
 
 \subsection{Qué es Bitcoin}
 
@@ -74,13 +74,58 @@ Claramente este tipo de encripción genera mayor seguridad en la comunicación, 
 
 \subsubsection*{Criptografía de curva elíptica}
 
+Uno de los primeros algoritmos de clave pública que se diseñaron fue \emph{RSA}\footnote{Nombrado así por las iniciales de sus creadores (\emph{Rivest–Shamir–Adleman})}, que se traba de generar pares de claves privada/pública en base a la teoría de números primos. Para brindar mayor seguridad, el algoritmo precisa números cada vez más grandes; debido a que conseguir números primos resulta una tarea muy costosa para las computadoras, este tipo de algoritmos no es ideal para dispositivos con poco poder de cómputo o poca batería
+
+En 1985, \emph{Neal Koblitz} y Victor Miller plantearon algoritmos de criptografía basados en \emph{curvas elípticas} \autocite{MediumECC}. Una curva elíptica está definida por el conjunto de valores que genera la siguiente función \autocite{CorbelliniECC}:
+
+\[ y^2 = x^3 + ax + b\]
+
+Una característica muy interesante que tienen este tipo de curvas (y que es en la que se basa el algoritmo), es que si una recta intersecta dos puntos de la curva, también intersectará un tercero
+
+\begin{multicols}{2}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{images/hackernoon-ecc-1.png}
+        \caption*{Curva elíptica \autocite{HackernoonECC}}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{images/hackernoon-ecc-2.png}
+        \caption*{Recta que atraviesa los puntos \texttt{(P, Q)}; también atraviesa el punto \texttt{(R)} \autocite{HackernoonECC}}
+    \end{figure}
+    
+\end{multicols}
+
+Nótese también que la curva es simétrica con respecto al eje \emph{Y}.
+
+Sin entrar en más detalles de la criptografía de curva elíptica, el par de claves privada/pública se genera gracias a esta característica de intersección de puntos.
 
 \subsection{Funciones de \emph{hash}}
+
+Otro elemento de la criptografía muy importante para Bitcoin son las funciones de \emph{hash} (la mayor carga de trabajo del protocolo se trata de calcular \emph{hashes}).
+
+Las funciones \emph{hash} se tratan de funciones que toman una entrada de largo variable y lo convierten en un valor de largo fijo, también conocido como \dq{digesto} \autocite{VanhouvtenHashIntro} 
+
 \subsubsection{\emph{SHA256}}
+
+La familia SHA (\emph{Secure Hash Algorithm}, Algoritmo de \emph{Hash} Seguro) es un sistema de funciones \emph{hash} criptográficas relacionadas de la Agencia de Seguridad Nacional de los Estados Unidos (NSA) y publicadas por el National Institute of Standards and Technology (NIST) \autocite{WikipediaSHA}. SHA256 es un \emph{hash} de 64 dígitos hexadecimales \emph{casi único} de un tamaño fijo de 256 bits (32 bytes) \autocite{OroYFinanzasSHA}. 
+
 \subsubsection{\emph{RIPEMD160}}
 
+RIPEMD160 (acrónimo de \emph{RACE Integrity Primitives Evaluation Message Digest}, primitivas de integridad del resumen del mensaje) es un algoritmo del resumen del mensaje de 160 bits desarrollado en Europa por \emph{Hans Dobbertin}, \emph{Antoon Bosselaers} y \emph{Bart Preneel} \autocite{WikipediaRIPEMD160}.
+
+RIPEMD160 fue diseñado en la comunidad académica abierta, en contraste con el algoritmo SHA-1, diseñado por la Agencia de Seguridad Nacional estadounidense (\emph{NSA}). Por otra parte, RIPEMD160 es un diseño menos popular y no está tan estudiado com las funciones SHA. Los \emph{hashes} de 160 bits RIPEMD (también llamados resúmenes RIPE del mensaje) se representan típicamente como números en código hexadecimal de 40 dígitos \autocite{OroYFinanzasRIPEMD160}.
+
+
 \subsection{Codificaciones}
+
+Los algoritmos de codificación \emph{binario-a-texto} transforman una secuencia de datos binarios a una secuencia de caracteres imprimibles. Estas codificaciones son necesarias cuando el canal de transmisión no acepta datos binarios \autocite{WikipediaEncoding} 
+
 \subsubsection{\emph{Base58Check}}
+
+El algoritmo de \emph{Base58Check} es una versión modificada del \emph{Base58}, y sirve para codificar arreglos de bytes en cadenas legibles para un humano \autocite{WikipediaBase58Check}  
 
 \section{Transacciones}
 \subsection{Ciclo de vida}
@@ -91,6 +136,10 @@ Claramente este tipo de encripción genera mayor seguridad en la comunicación, 
 
 \section{Minería de bloques}
 \subsection{Prueba de trabajo}
+
+\section{Billeteras}
+
+
 
 
 
