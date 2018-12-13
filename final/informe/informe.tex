@@ -1,0 +1,104 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'includes.tex' se encuentran la importación de paquetes necesarios
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{project_settings}
+\input{listings_settings}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% En 'titlepage.tex' se encuentra la página de título
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INDICE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\clearpage 
+
+\lstset{style=bashstyle}
+
+\section{Introducción}
+
+El presente trabajo de investigación se tratará sobre la \emph{criptomoneda}\footnote{Moneda digital o virtual diseñada para funcionar como medio de intercambio. Utiliza la criptografía para asegurar y verificar transacciones \autocite{CointelegraphBitcoin}} bitcoin, haciendo foco principlamente sobre los sistemas de criptografía que utiliza. 
+
+La primer parte explicará de manera amplia lo que es la criptografía, y hará hincapié en los tipos de criptografía que implementa el protocolo Bitcoin. También incluirá las funciones de \emph{hash} que utiliza, y los algoritmos de codificación. Luego, desarrollará sobre las transacciones en Bitcoin (su ciclo de vida y cómo son validadas), siempre incluyendo los elementos de criptografía utilizados.
+
+Por último, el trabajo explicará brevemente la red de comunicaciones en la que corre el protocolo Bitcoin -\emph{blockchain}- y cómo es la inclusión de nuevos datos a la red.
+
+\subsection{Qué es Bitcoin}
+
+Bitcoin es la primer aplicación de la tecnología blockchain. Comenzó una revolución con la introducción de la primer moneda digital totalmente descentralizada, y demostró ser extremadamente segura y estable \autocite{MasteringBlockchainBitcoin}
+
+El \emph{paper} titulado \emph{Bitcoin: A Peer-to-Peer Electronic Cash System}, escrito por \emph{Satoshi Nakamoto}, introduce la idea de un \emph{dinero digital} que no necesita un banco intermediario para transferir pagos entre pares.
+
+Bitcoin se puede definir de varias maneras; es un \textbf{protocolo}, es una \textbf{moneda digital}, y es una \textbf{plataforma}. Es una combinación de redes \emph{peer-to-peer}, protocolos de comunicación, y software que facilitan la creación y uso de la moneda digital llamada bitcoin. Nótese que Bitcoin con \emph{B} mayúscula se refiere al protocolo, mientras que bitcoin con \emph{b} minúscula se refiere a la moneda. Los nodos en la red \emph{peer-to-peer} se comunican utilizando el protocolo Bitcoin \autocite{MasteringBlockchainBitcoin}.  
+
+Una de las principales ventajas de bitcoin frente a otros proyectos para generar un dinero electrónico, es la forma en la que soluciona el \textbf{problema del doble gasto}\footnote{Situación en la que se realizan dos o más transacciones con un mismo dinero}.
+
+\subsection{Criptografía}
+
+La criptografía es un área de estudio que consiste de varios esquemas y técnicas para transformar un mensaje en texto plano en un mensaje cifrado; este proceso de transformación se conoce como \textbf{encripción}, mientras que el proceso de conseguir el mensaje original a partir del cifrado se llama \textbf{desencripción} \autocite{StallingsCryptography}
+
+\subsubsection{Simétrica}
+
+La criptograía simétrica (o \emph{encripción de clave secreta}) encripta un mensaje utilizando \textbf{una única llave} - la misma llave que encripta el mensaje desencripta el mensaje cifrado para obtener de nuevo el original. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/van-houvten-simetrico.png}
+    \caption*{Cifrado y descifrado simétrico (\texttt{P} representa el texto plano, \texttt{C} el mensaje cifrado, \texttt{E} y \texttt{D} las funciones de cifrado/descifrado respectivamente, y \texttt{k} la clave secreta) \autocite{VanhouvtenBlockCiphers}}
+\end{figure}
+
+Los algoritmos de encriptación simétricos pueden trabajar con \emph{bloques} (encriptando bloques de un mismo tamaño), o con \emph{flujos} (encriptando flujos de datos, pueden ser flujos de 1 bit).  
+
+Este tipo de encriptación es muy performante y no incrementa el tamaño del mensaje, pero introduce una vulnerabilidad al tener que compartir la clave secreta entre las partes que se están queriendo comunicar.
+
+\subsubsection{Asimétrica}
+
+La encriptación asimétrica (o \emph{encripción de clave pública}), a diferencia de la simétrica que utiliza una única clave, necesita de dos llaves para funcionar: una \textbf{una privada} y \textbf{una pública}.  
+
+Este sistema de encriptación se basa en que se utiliza una clave para encriptar el mensaje, y otra clave (diferente de la primera, pero relacionada) para desencriptar el mensaje. Su característica principal se trata de que se computacionalmente inviable determinar la clave de desencripción solamente sabiendo el algoritmo de cifrado y la clave de encripción \autocite{StallingsPublicKeyPrinciples}.
+
+Teniendo este par de claves, se puede operar de dos modos distintos:
+
+\begin{itemize}
+    \item Modo encripción: el emisor encripta el mensaje con la clave pública del receptor, de modo que sólo el receptor sea capaz que de desencriptar el mensaje (utilizando su clave privada)
+    \item Modo autenticación: el emisor encripta el mensaje (o un \emph{digesto} del mensaje) con su clave privada y los anexa al mensaje. El receptor desencripta este anexo con la clave pública del emisor, y compara el anexo desencriptado con el mensaje (o el digesto pudo generar el receptor). Si son iguales, entonces se garantiza que el mensaje fue enviado por el emisor, y que no fue alterado en el camino
+\end{itemize}
+
+Claramente este tipo de encripción genera mayor seguridad en la comunicación, debido a que las claves para desencriptar los mensajes no se deben intercambiar entre las partes previamente a comenzar la comunicación (son privadas a cada cliente y no deben ser reveladas). Sin embargo, aumentan el tamaño del mensaje y no son algoritmos tan performantes como los simétricos.
+
+\subsubsection*{Criptografía de curva elíptica}
+
+
+\subsection{Funciones de \emph{hash}}
+\subsubsection{\emph{SHA256}}
+\subsubsection{\emph{RIPEMD160}}
+
+\subsection{Codificaciones}
+\subsubsection{\emph{Base58Check}}
+
+\section{Transacciones}
+\subsection{Ciclo de vida}
+\subsection{Verificación de una transacción}
+
+\section{\emph{Blockchain}}
+\subsection{Estructura de un bloque}
+
+\section{Minería de bloques}
+\subsection{Prueba de trabajo}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIN DOCUMENTO, AHORA REFERENCIAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\printbibliography
+
+\end{document}
