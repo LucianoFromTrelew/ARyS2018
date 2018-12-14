@@ -168,10 +168,90 @@ Cada transacción tiene que ser verificada por los nodos que componen la red de 
 \end{enumerate}
 
 \section{\emph{Blockchain}}
+
+Blockchain, o la \emph{cadena de bloques}, es el \dq{libro de cuentas} público, ordenado en el tiempo, e inmutable de todas las transacciones en la red de bitcoin. Cada bloque está identificado por un \emph{hash} en la cadena y está vinculado con su bloque anterior referenciando su \emph{hash}. Todos los bloques están relacionados con su bloque anterior, a excepción del primer bloque, también llamado bloque \emph{génesis}. 
+
+Bloques nuevo son añadidos a la cadena cada 10 minutos, aproximadamente. El protocolo de blockchain maneja una \emph{dificultad}\footnote{La dificultad signifca qué tan difícil es para los mineros generar un bloque nuevo} para agregar nuevos bloques que puede ir aumentando o disminuyendo (según la capacidad de cómputo disponible en la red) para que se mantenga la frecuencia de un bloque nuevo cada 10 minutos \autocite{MasteringBlockchainBlockchain}.
+
 \subsection{Estructura de un bloque}
 
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | p{8cm} | }
+            \hline
+            \textbf{Bytes} & \textbf{Campo} & \textbf{Descripción}  \\
+            \hline
+            80 & Cabecera del bloque & Incluye varios campos de metadatos del bloque \\
+            \hline
+            \emph{variable} & Contador de transacciones & Incluye la cantidad de transacciones que incluye el bloque, incluye la \emph{coinbase transaction} \\
+            \hline
+            \emph{variable} & Transacciones & Todas las transacciones del bloque \\
+            \hline
+        \end{tabular}
+        \caption*{Estructura de un bloque \autocite{MasteringBlockchainBlockStructure}}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | p{9cm} | }
+            \hline
+            \textbf{Bytes} & \textbf{Campo} & \textbf{Descripción}  \\
+            \hline
+            4 & Versión & Número de versión de bloque. Indica las reglas que se siguieron para validar el bloque \\
+            \hline
+            32 & \emph{Hash} del bloque previo & \emph{Hash} SHA256 del bloque previo  \\
+            \hline
+            32 & \emph{Merkle root hash} & \emph{Hash} del nodo raíz del árbol \emph{Merkle} para garantizar la integridad del bloque \\
+            \hline
+            4 & Estampa de tiempo & Estampa de tiempo del momento en el que se creó el bloque (formato \emph{Unix epoch}) \\
+            \hline
+            4 & Dificultad & Valor de la dificultad de la red \\
+            \hline
+            4 & \emph{Nonce} & Número arbitrario que los mineros van cambiando hasta satisfacer una condición \\
+            \hline
+        \end{tabular}
+        \caption*{Estructura de la cabecera de un bloque \autocite{MasteringBlockchainBlockHeaderStructure}}
+    \end{center}
+\end{table}
+
+
 \section{Minería de bloques}
+
+La minería de un bloques es una tarea que conlleva muchos recursos (de hardware y de electricidad) con el cual se agregan nuevos bloques a la red. Los bloques contienen las transacciones que son validadas mediante el proceso de minado (llevado a cabo por los nodos mineros) y son agregadas a la cadena de bloques. Nuevas monedas son acuñadas por los mineros al gastar los recursos necesarios para realizar la tarea de minado. Esto también asegura el sistema contra fraudes y ataques de \emph{doble gasto} mientras que agregar más monedas al ecosistema.
+
+Como se decía en la sección anterior, aproximadamente cada 10 minutos se añade un bloque nuevo a la red. Los mineros son recompensados con monedas si son los que crearon el bloque nuevo. La tasa de creación de bitcoin decrementa el 50\% cada 210 mil bloques, aproximadamente 4 años. Cuando bitcoin comenzó, la recompensa por un bloque nuevo eran 50 bitcoin; en 2012 se redujo a 25, y en Julio de 2016 llegó a 12,5.
+
+El sistema de bitcoin está diseñado para la creación de monedas tenga un límite. Aproximadamente en 2140, cuando se hayan creado 21 millones de bitcoins, los mineros de bloques 
+no serán recompensados por crear un nuevo bloque, sin embargo podrán tener una ganacia por las tarifas de las transacciones que incluyan en el bloque \autocite{MasteringBlockchainMining}
+
 \subsection{Prueba de trabajo}
+
+La prueba de trabajo (\emph{Proof of Work}) es una demostración de que suficiente poder computacional fue empleado para construir un bloque válido. En este modelo, los nodos compiten para ser seleccionados en proporción a su capacidad computacional.
+
+La prueba de trabajo consiste en calcular el \emph{hash} del bloque. Éste se compone de la suma de todos los datos del bloque, y debe comenzar con \emph{n} número de ceros (o que sea menor a cierto valor). La cantidad de ceros o el valor \emph{objetivo} está definido por la \emph{dificultad} de la red.     
+
+Debido a que es fácil calcular el \emph{hash} de un valor, pero imposible conseguir el valor original a partir de un \emph{hash}, la única forma de calcular el \emph{hash} del bloque es \textbf{con fuerza bruta} (probar valores hasta encontrar un resultado). El campo \texttt{nonce} de la cabecera del bloque es el que tienen que ir incrementando los mineros hasta encontrar el \emph{hash} indicado.
+
+\begin{figure}[H]
+    \centering
+    \[ H(N || P\_hash|| Tx_1 || Tx_2 || ... || Tx_n) < Objetivo \]
+    \caption*{Cálculo de la cabecera del bloque, donde \texttt{H} es la función de \emph{hash}, \texttt{N} es el \emph{nonce}, \texttt{P\_hash} es el \emph{hash} del bloque anterior, \texttt{Tx} son las transacciones que incluye el bloque, y \texttt{Objetivo} la dificultad}
+\end{figure}
+
+Una vez conseguido el \emph{hash}, el bloque es inmediatamente difundido por la red. Debe ser aceptado por los otros mineros para ser agregado a la red \autocite{MasteringBlockchainProofOfWork}. 
+
+\subsubsection*{Algoritmo de minado}
+
+La secuencia de pasos que llevan a cabo los mineros que crear un nuevo bloque es la siguiente \autocite{MasteringBlockchainMiningAlgorithm}
+
+\begin{itemize}
+    \item El bloque anterior se recupera de la red
+    \item Se obtiene un conjunto de posibles transacciones que podrían conformar el bloque
+    \item Computar el \emph{hash} de la cabecera del bloque con un \emph{nonce} = 0 
+    \item Si el \emph{hash} obtenido es menor al objetivo, detener el proceso
+    \item Si no es menor, repetir el proceso incrementando el \emph{nonce} 
+\end{itemize}
 
 \section{Billeteras}
 
