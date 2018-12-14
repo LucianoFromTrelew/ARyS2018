@@ -118,7 +118,6 @@ RIPEMD160 (acrónimo de \emph{RACE Integrity Primitives Evaluation Message Diges
 
 RIPEMD160 fue diseñado en la comunidad académica abierta, en contraste con el algoritmo SHA-1, diseñado por la Agencia de Seguridad Nacional estadounidense (\emph{NSA}). Por otra parte, RIPEMD160 es un diseño menos popular y no está tan estudiado com las funciones SHA. Los \emph{hashes} de 160 bits RIPEMD (también llamados resúmenes RIPE del mensaje) se representan típicamente como números en código hexadecimal de 40 dígitos \autocite{OroYFinanzasRIPEMD160}.
 
-
 \subsection{Codificaciones}
 
 Los algoritmos de codificación \emph{binario-a-texto} transforman una secuencia de datos binarios a una secuencia de caracteres imprimibles. Estas codificaciones son necesarias cuando el canal de transmisión no acepta datos binarios \autocite{WikipediaEncoding} 
@@ -128,8 +127,45 @@ Los algoritmos de codificación \emph{binario-a-texto} transforman una secuencia
 El algoritmo de \emph{Base58Check} es una versión modificada del \emph{Base58}, y sirve para codificar arreglos de bytes en cadenas legibles para un humano \autocite{WikipediaBase58Check}  
 
 \section{Transacciones}
+
+Bitcoin utiliza un esquema de clave pública/privada para llevar a cabo la principal función del ecosistema de la moneda, que son las \textbf{transacciones}. Cada  transacción se compone de al menos \textbf{una entrada y una salida}. Las entradas se pueden pensar como monedas siendo gastadas \emph{que fueron creadas en transacciones anteriores}, y las salidas como monedas que están siendo creadas. Existe un caso especial, en la que una transacción no tiene entrada - estas transacciones son las que generan nuevas monedas, y son las que se registran como primer entrada en los bloques \autocite{MasteringBlockchainTransactions}. 
+
+Si un usuario envía monedas a otro usuario, la transacción tiene que ser firmada con la clave privada del emisor, y también se requiere una referencia a las transacciones previas para demostrar el origen de las monedas, y que todavía no han sido gastadas. De hecho, las monedas son \emph{transacciones sin gastar}, representadas en \emph{Satoshis} \footnote{1/100000000 bitcoin}.
+
+Las transacciones no están encriptadas y son públicamente visibles.
+
 \subsection{Ciclo de vida}
+
+El ciclo de vida de una transacción es el siguiente \autocite{MasteringBlockchainTransactionsLifeCycle}:
+
+\begin{enumerate}
+    \item Un usuario genera una transacción usando algún software de Bitcoin
+    \item El software firma la transacción con la clave privada del usuario
+    \item La transacción es \emph{difundida} a toda la red de Bitcoin (blockchain) usando un algoritmo de \emph{inundación} (\emph{flooding})  
+    \item Los nodos \emph{mineros} incluyen la transacción en el próximo \emph{bloque} a minar
+    \item El minado comienza una vez que el minero que resolvió la \emph{prueba de trabajo} (\emph{Proof of Work}) difunda el nuevo bloque a la red
+    \item Los otros nodos verifican el bloque y los siguen propagando
+    \item Finalmente, la confirmación de la transacción figura en la cuenta (\emph{billetera}) del receptor, y luego de varias confirmaciones (estadísticamente, seis confirmaciones es suficiente), la transacción se considera confirmada y finalizada
+\end{enumerate}
+
 \subsection{Verificación de una transacción}
+
+Cada transacción tiene que ser verificada por los nodos que componen la red de Bitcoin. Los aspectos a verificar son los siguientes \autocite{MasteringBlockchainVerification}:
+
+\begin{enumerate}
+    \item La transacción respeta la sintaxis del lenguaje de \emph{scripting} \footnote{Lenguaje basado en pilas llamado \emph{script} que describe cómo las monedas pueden ser gastadas y transferidas \autocite{MasteringBlockchainScript}} de Bitcoin 
+    \item Las entradas y las salidas no son vacías
+    \item El tamaño máximo de la transacción no supera el tamaño máximo del bloque (actualmente 1 MB)
+    \item El valor de las salidas no debe ser menor a 0 ni mayor a 21 millones de bitcoin
+    \item Todas las entradas deben tener especificada una salida anterior (salvo las transacciones que generan monedas)
+    \item No debe existir una transacción igual en ningún bloque, ni esperando ser confirmada
+    \item Las salidas que corresponden a las entradas de la transacción no deben figurar en ningún otra transacción (problema del \emph{double spending})
+    \item Para cada entrada, debe existir su correspondiente salida en alguna transacción
+    \item Para cada entrada, si la salida correspondiente referenciada es la salida que origina las monedas (llamada \emph{coinbase transaction}), esta última debe tener al menos 100 confirmaciones
+    \item Para cada entrada, si la salida correspondiente referenciada no existe o ya fue gastada, la transacción es rechazada
+    \item La suma de las entradas debe ser mayor o igual al total de las salidas (si el valor de las entradas es mayor, el resto se considera \emph{tarifa de la transacción} \footnote{Las tarifas de las transacciones definen la prioridad que tendrá la transacción al ser eligida por los mineros para agregarla a un nuevo bloque})
+    \item La tarifa de la transacción debe ser mayor o igual a un valor mínimo establecido
+\end{enumerate}
 
 \section{\emph{Blockchain}}
 \subsection{Estructura de un bloque}
