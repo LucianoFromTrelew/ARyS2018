@@ -222,6 +222,8 @@ La minería de un bloques es una tarea que conlleva muchos recursos (de hardware
 
 Como se decía en la sección anterior, aproximadamente cada 10 minutos se añade un bloque nuevo a la red. Los mineros son recompensados con monedas si son los que crearon el bloque nuevo. La tasa de creación de bitcoin decrementa el 50\% cada 210 mil bloques, aproximadamente 4 años. Cuando bitcoin comenzó, la recompensa por un bloque nuevo eran 50 bitcoin; en 2012 se redujo a 25, y en Julio de 2016 llegó a 12,5.
 
+El concepto de \dq{minería} se debe a que las monedas se crean o se \dq{emiten} al crear un nuevo bloque; es una analogía a la minería de oro, en donde en base a un trabajo se obtiene algo de valor.
+
 El sistema de bitcoin está diseñado para la creación de monedas tenga un límite. Aproximadamente en 2140, cuando se hayan creado 21 millones de bitcoins, los mineros de bloques 
 no serán recompensados por crear un nuevo bloque, sin embargo podrán tener una ganacia por las tarifas de las transacciones que incluyan en el bloque \autocite{MasteringBlockchainMining}
 
@@ -255,8 +257,30 @@ La secuencia de pasos que llevan a cabo los mineros que crear un nuevo bloque es
 
 \section{Billeteras}
 
+Las billeteras en Bitcoin es el software encargado de almacenar las claves privadas o públicas y las direcciones bitcoin. Las claves privadas pueden ser generadas de distintas maneras y son usadas por diferentes tipos de billeteras. Cabo destacar que las billeteras \textbf{no almacenan monedas}; los balances de las cuentas de los usuarios se calculan en base a las transacciones (más especficimante, a las \emph{salidas de las transacciones no gastadas}) almacenadas en blockchain \autocite{MasteringBlockchainWallets}. 
 
+Para generar el par de claves pública/privada, Bitcoin utiliza \textbf{criptografía de curva elíptica}. Las direcciones de bitcoin son creadas aplicando el siguiente algoritmo a la clave pública correspondiente a una clave privada \autocite{MasteringBlockchainKeys}:
 
+\begin{enumerate}
+    \item Tomar la clave pública y aplicarle el algoritmo de SHA256
+    \item A ese \emph{hash}, aplicarle de nuevo SHA256 
+    \item Al segundo resultado, aplicarle el algoritmo RIPEMD160
+    \item Al \emph{hash} resultante de 160 bits, se le agrega un prefijo con un número de versión
+    \item Por último, se codifica el valor con el algoritmo Base58Check, resultando en una cadena de entre 26 y 35 caracteres que comienza con 1 o 3
+\end{enumerate}
+
+\subsection{Tipo de billeteras}
+
+\begin{itemize}
+    \item No-determinísticas: contienen claves privadas generadas aleatoriamente (son conocidas también como \emph{Just a Bunch on Key wallets}). El cliente de bitcoin genera las claves cuando es iniciado por primera vez y genera claves cuando es requerido
+    \item Determinísticas: las claves son derivadas de una \emph{semilla} mediante una función de \emph{hash}. Esta semilla es generada aleatoriamente y es comúnmente representada por una \textbf{palabra clave}. Esta palabra clave puede servir para recuperar todas las claves en caso de que se pierdan
+    \item Determinísticas jerarquícas: almacenan claves en una estructura de árbol derivadas de una semilla. La semilla genera la \textbf{clave padre}, que es utilizada para generar \textbf{claves hijas}, y subsecuentemente \textbf{claves nietas}. La jerarquía completa se puede recuperar si se conoce la clave padre.
+    \item \emph{Brain wallets}: similar al tipo anterior, pero la clave padre es una contraseña definida por el usuario
+    \item Papel: billetera basada en papel; se imprime y tiene la clave privada codificada en QR
+    \item Hardware: dispositivo electrónico que almacen la clave privada
+    \item Online: las claves privadas son almacenadas por un servicio online
+    \item Móviles: billetera implementada en dispositivos móviles \autocite{MasteringBlockchainTypeOfWallets}
+\end{itemize}
 
 
 
