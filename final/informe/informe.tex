@@ -19,7 +19,7 @@
 \tableofcontents
 \clearpage 
 
-\lstset{style=bashstyle}
+\lstset{style=pythonstyle}
 
 \section{Introducción}
 
@@ -214,6 +214,113 @@ Bloques nuevo son añadidos a la cadena cada 10 minutos, aproximadamente. El pro
     \end{center}
 \end{table}
 
+
+\subsection{Implementación en Python}
+
+A continuación se incluye la implementación de las clases necesarias para modelar una cadena de bloques en el lenguaje de programación Python (implementación tomada de \underline{\href{https://github.com/howCodeORG/Simple-Python-Blockchain}{este repositorio}}).
+
+\begin{lstlisting}[title={Clase para modelar un bloque en blockchain}]
+from datetime import datetime
+from hashlib import sha256
+
+class Block:
+    """
+    Clase que representa un bloque en blockchain
+    """
+    block_no = 0
+    data = None
+    next = None
+    hash = None
+    nonce = 0
+    previous_hash = 0x0
+    timestamp = datetime.now()
+
+    def __init__(self, data):
+    """Constructor del bloque - recibe datos para almacenar"""
+        self.data = data
+
+    def hash(self):
+    """Devuelve el hash del bloque 
+    (hash de todos los datos del bloque)"""
+        h = sha256()
+        h.update(
+            str(self.nonce).encode('utf-8') +
+            str(self.data).encode('utf-8') +
+            str(self.previous_hash).encode('utf-8') +
+            str(self.timestamp).encode('utf-8') +
+            str(self.block_no).encode('utf-8')
+        )
+        return h.hexdigest()
+
+    def __repr__(self):
+    """Devuelve una cadena que representa el bloque y su contenido"""
+        return f"""Block Hash: {str(self.hash())}
+    BlockNo: {str(self.block_no)}
+    Block Data: {self.data}
+    Hashes: {self.nonce}
+--------------------"""
+\end{lstlisting}
+
+\begin{lstlisting}[title={Clase para modelar la blockchain}]
+class Blockchain:
+    """Clase para modelar la blockchain"""
+
+    # Dificultad de la red
+    diff = 15
+    max_nonce = 2**32
+    target = 2 ** (256-diff)
+
+    # Creación del primer bloque
+    block = Block("Genesis")
+    _ = head = block
+
+    def add(self, block):
+        """Agrega un bloque a la cadena"""
+
+        block.previous_hash = self.block.hash()
+        block.block_no = self.block.block_no + 1
+
+        self.block.next = block
+        self.block = self.block.next
+
+    def mine(self, block):
+        """Calcula el hash de un bloque y lo agrega a la cadena"""
+        for n in range(self.max_nonce):
+            if int(block.hash(), 16) <= self.target:
+                self.add(block)
+                break
+            else:
+                block.nonce += 1
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.head == None:
+            raise StopIteration() 
+        
+        _block = self.head
+        self.head = self.head.next
+        return _block
+\end{lstlisting}
+
+Teniendo el bloque y la cadena de bloques modelado, para simular el funcionamiento de una blockchain se pueden usar las clases anterior de la siguiente manera:
+
+\begin{lstlisting}
+blockchain = Blockchain()
+
+# Agregar diez bloques a la cadena
+# El tiempo que toma finalizar el bucle depende 
+# del poder de cómputo de la máquina 
+# y de la dificultad configurada en la blockchain
+for n in range(10):
+    blockchain.mine(Block("Block " + str(n+1)))
+
+# Imprimir los bloques de la cadena
+for block in blockchain:
+    print(block)
+
+\end{lstlisting}
 
 \section{Minería de bloques}
 
